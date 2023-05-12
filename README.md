@@ -1591,7 +1591,7 @@ Return spots filtered by query parameters.
   * Status Code: 400
   * Headers:
     * Content-Type: application/json
-  * Body:
+  * Body: 
 
     ```json
     {
