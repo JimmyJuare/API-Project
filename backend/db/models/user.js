@@ -1,6 +1,8 @@
 'use strict';
 const { Model } = require('sequelize');
 
+const { Validator } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate() {
