@@ -16,7 +16,7 @@ module.exports = {
       ownerId: {
         type: Sequelize.INTEGER,
         references: {
-            model: 'Users',
+            model:'Users',
             key: 'id',
         },
         onDelete: 'cascade'
@@ -67,14 +67,6 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue:Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      avgRating:{
-        type:Sequelize.DECIMAL(2,1),
-        allowNull:false
-      },
-      previewImage:{
-        type:Sequelize.STRING,
-        allowNull:false
-      }
     }, options);
   },
   async down(queryInterface, Sequelize) {
