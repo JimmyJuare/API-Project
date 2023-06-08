@@ -46,7 +46,6 @@ router.get('/current', requireAuth, async (req, res) => {
       include:[Review, SpotImage]
       
     })
-    console.log(currentUser);
     if(!currentUser){
       res.status(404).json({message:'Spot couldn\'t be found'})
     }else{
