@@ -1,4 +1,6 @@
 'use strict';
+const { Review } = require('../models');
+
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
@@ -8,7 +10,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     options.tableName = 'Reviews';
     try {
-      await queryInterface.bulkInsert(options, [
+      await Review.bulkCreate([
         {
           spotId: 1,
           userId: 1,
@@ -27,7 +29,7 @@ module.exports = {
           review: 'it was good',
           stars: 4
         }
-      ]);
+      ], {validate:true});
     } catch (error) {
       console.error('Error seeding Reviews:', error);
     }

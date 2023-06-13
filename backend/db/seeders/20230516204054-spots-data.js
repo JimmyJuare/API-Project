@@ -1,4 +1,7 @@
 'use strict';
+
+const { Spot } = require('../models');
+
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
@@ -6,9 +9,8 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    options.tableName = 'Spots';
     try {
-      await queryInterface.bulkInsert(options,[
+      await Spot.bulkCreate([
         {
           ownerId:1,
           address:'5555444 west street',
@@ -45,7 +47,7 @@ module.exports = {
           description: "nice place with big rooms",
           price:443.50
         }
-      ])
+      ], {validate:true})
       
     } catch (error) {
       console.log(error);
