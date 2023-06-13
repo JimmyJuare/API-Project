@@ -9,7 +9,6 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    options.tableName ="ReviewImages";
    await ReviewImage.bulkCreate([
     {
     reviewId: 1,
