@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Spot, Review, SpotImage, User } = require('../../db/models');
+const { Spot, Review, ReviewImage, SpotImage, User } = require('../../db/models');
 const {requireAuth} = require('../../utils/auth')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -35,6 +35,15 @@ router.get('/', async (req, res) => {
       check('price')
       .exists({ checkFalsy: true })
       .withMessage('Please provide a price.'),
+    handleValidationErrors
+  ];
+  const validateReview = [
+    check('review')
+      .exists({ checkFalsy: true })
+      .withMessage('Review text is required'),
+    check('stars')
+      .exists({ checkFalsy: true })
+      .withMessage('Stars must be an integer from 1 to 5'),
     handleValidationErrors
   ];
   //gets spots of current user
@@ -147,6 +156,51 @@ router.delete('/:spotId', requireAuth, async(req, res) =>{
   else{
     await spot.destroy()
   res.status(200).json({message:'Successfully deleted'})
+  }
+})
+//get all reviews based on spots ID
+router.get('/:spotId/reviews', async(req, res) =>{
+  const spotId = req.params.spotId
+  const Reviews = await Review.findAll({
+    where:{
+      spotId:spotId
+    },
+    include:[User, ReviewImage]
+  })
+  if(!Reviews.length){
+     res.status(404).json({message:'Spot couldn\'t be found'})
+  } 
+  else{
+  res.status(200).json({Reviews})
+  }
+})
+//create a review for a spot based on spots ID
+router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) =>{
+  const spotId = parseInt(req.params.spotId)
+  const userId = req.user.id
+  const spot = await Spot.findOne({
+    where:{
+      id:spotId
+    }
+  })
+  const reviewSpot = await Review.findOne({
+    where:{
+      spotId:spotId,
+      userId:req.user.id
+
+    }
+  })
+  if(!spot) res.status(404).json({message: "spot couldn\'t be found"})
+  if(reviewSpot) res.status(500).json({message: "User already has a review for this spot"})
+  else{
+    const newReview = await Review.create({
+      spotId:spotId,
+      userId:userId,
+      review:req.body.review,
+      stars:req.body.stars,
+    })
+    console.log(newReview);
+    res.status(201).json(newReview)
   }
 })
 module.exports = router;
