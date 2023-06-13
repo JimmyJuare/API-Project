@@ -33,7 +33,7 @@ const validateSignup = [
     .withMessage('Password must be 6 characters or more.'),
   handleValidationErrors
 ];
-  
+
 // Sign up
 router.post(
     '',
@@ -42,7 +42,7 @@ router.post(
       const { email, password, username, firstname, lastname } = req.body;
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({ email, username, hashedPassword, firstname, lastname });
-  
+
       const safeUser = {
         id: user.id,
         firstname:user.firstname,
@@ -50,12 +50,12 @@ router.post(
         email: user.email,
         username: user.username,
       };
-  
+
       await setTokenCookie(res, safeUser);
-  
+
       return res.json({
         user: safeUser
       });
     }
-  );
-  module.exports = router;
+);
+module.exports = router;

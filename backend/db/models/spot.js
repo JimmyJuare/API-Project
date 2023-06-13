@@ -13,8 +13,16 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Spot.belongsTo(models.User, {
         foreignKey: 'ownerId',
-        onDelete: 'CASCADE',
         hooks: true
+      }),
+      Spot.hasMany(models.Review, {
+        foreignKey:'spotId'
+      }),
+      Spot.hasMany(models.SpotImage, {
+        foreignKey:'spotId'
+      }),
+      Spot.hasMany(models.Booking, {
+        foreignKey:'spotId'
       });
     }
   }
@@ -82,20 +90,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isDecimal: true,
       },
-    },
-    avgRating: {
-      type: DataTypes.DECIMAL(1, 1), // Maximum 3 digits with 1 decimal place
-      allowNull: false,
-      validate: {
-        isDecimal: true,
-      },
-    },
-    previewImage: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [1, 256]
-      }
     }
   }, {
     sequelize,
