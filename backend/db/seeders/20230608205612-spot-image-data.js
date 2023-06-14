@@ -23,14 +23,17 @@ module.exports = {
      {
      spotId: 1,
      url: 'image url',
+     preview:true
    },
      {
      spotId: 2,
      url: 'image url 2',
+     preview:false
    },
      {
      spotId: 3,
      url: 'image url 3',
+     preview:true
    },
  ], {validate:true})
   },
