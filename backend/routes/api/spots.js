@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Spot, Review, ReviewImage, SpotImage, User } = require('../../db/models');
 const {requireAuth} = require('../../utils/auth')
+const { Op, Sequelize } = require('sequelize')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 //gets all spots
@@ -90,6 +91,7 @@ router.get('/current', requireAuth, async (req, res) => {
       res.status(404).json({message:'Spot couldn\'t be found'})
     } else{
       const newSpotImage = await SpotImage.create({
+        spotId:spotId,
         url:req.body.url,
         preview:req.body.preview
       }
@@ -102,6 +104,56 @@ router.get('/current', requireAuth, async (req, res) => {
       res.status(200).json(response)
     }
 })
+
+// get details of a Spot from an ID
+router.get('/:spotId', async(req, res) =>{
+  const spotId = req.params.spotId
+
+  const count = await Review.count({where:{spotId:spotId}})
+  
+  const countSum = await Review.sum('stars',{
+    where:{
+      spotId:spotId
+    },
+    attributes: [[Sequelize.fn('SUM', Sequelize.col('stars')), 'totalRating']],
+  })
+  const totalRating =  countSum || 0
+  
+  const averageStarRating = totalRating > 0 ? parseFloat((totalRating/count).toFixed(1)) : 0
+
+  const spot = await Spot.unscoped().findOne({
+    where:{id:spotId},
+    include:[SpotImage,User]
+  })
+  
+  if(!spot){
+    res.status(404).json({message:'Spot couldn\'t be found'})
+  } 
+  else{
+
+  const result = {
+      id: spot.id,
+      ownerId: spot.ownerId,
+      address: spot.address,
+      city:spot.city,
+      state: spot.city,
+      country: spot.country,
+      lat: spot.lat,
+      lng: spot.lng,
+      name: spot.name,
+      description: spot.description,
+      price: spot.price,
+      createdAt: spot.createdAt,
+      updatedAt: spot.updatedAt,
+      numReviews: count,
+      avgStarRating:averageStarRating,
+      SpotImages:spot.SpotImages,
+      Owners:spot.User
+  }
+  res.status(200).json(result)
+  }
+})
+//update a spot
 router.put('/:spotId', validateValues, requireAuth, async(req, res) => {
   const spotId = req.params.spotId
   console.log(spotId);
@@ -142,20 +194,6 @@ router.put('/:spotId', validateValues, requireAuth, async(req, res) => {
       updatedAt:update.updatedAt
     }
     res.status(200).json(result)
-  }
-})
-router.delete('/:spotId', requireAuth, async(req, res) =>{
-  const spotId = req.params.spotId
-  const spot = await Spot.findOne({
-    where:{
-      id:spotId,
-      ownerId:req.user.id
-    }
-  })
-  if(!spot) res.status(404).json({message:'Spot couldn\'t be found'})
-  else{
-    await spot.destroy()
-  res.status(200).json({message:'Successfully deleted'})
   }
 })
 //get all reviews based on spots ID
