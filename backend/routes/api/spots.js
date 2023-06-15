@@ -5,6 +5,7 @@ const {requireAuth} = require('../../utils/auth')
 const { Op, Sequelize } = require('sequelize')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const { user } = require('pg/lib/defaults');
 //gets all spots
 router.get('/', async (req, res) => {
     const spots = await Spot.findAll()
@@ -194,6 +195,23 @@ router.put('/:spotId', validateValues, requireAuth, async(req, res) => {
       updatedAt:update.updatedAt
     }
     res.status(200).json(result)
+  }
+})
+//delete a spot
+router.delete('/:spotId', requireAuth, async(req, res) =>{
+  const spotId = req.params.spotId
+  const spot = await Spot.findOne({
+    where:{
+      ownerId:req.user.id,
+      id:spotId
+    }
+  })
+  if(!spot){
+     res.status(404).json({message:'Spot couldn\'t be found'})
+  } 
+  else{
+    await spot.destroy()
+  res.status(200).json({message:'successfully deleted'})
   }
 })
 //get all reviews based on spots ID
