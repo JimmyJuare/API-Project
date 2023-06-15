@@ -40,7 +40,10 @@ router.post(
           }
         }
       });
-  
+
+      if((credential || password) && !user){
+        res.json({message:'invalid credentials'})
+      }
       if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
         const err = new Error('Bad Request');
         err.status = 401;
