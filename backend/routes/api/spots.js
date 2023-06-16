@@ -67,27 +67,27 @@ const previewImage = await PreviewImage.url
 
 const averageRating = await getAvg(userId, count)
 const avgRating = averageRating
-const result = map({
-  id:spot.id,
+const Spots = spot.map(e => ({
+  id:e.id,
   ownerId: spot.ownerId,
   address: spot.address,
-  city: spot.city,
-  state: spot.state,
-  country: spot.country,
-  lat: spot.lat,
-  lng: spot.lng,
-  name: spot.name,
-  description: spot.description,
-  price: spot.price,
-  createdAt: spot.createdAt,
-  updatedAt:spot.updatedAt,
+  city: e.city,
+  state: e.state,
+  country: e.country,
+  lat: e.lat,
+  lng: e.lng,
+  name: e.name,
+  description: e.description,
+  price: e.price,
+  createdAt: e.createdAt,
+  updatedAt:e.updatedAt,
   avgRating: avgRating,
   previewImage: previewImage
-})
+}))
   if (!spot) {
     res.status(404).json({ message: 'Spot couldn\'t be found' }) 
   } else {
-    res.status(200).json({ spot })
+    res.status(200).json({ Spots })
   }
 });
 
@@ -237,7 +237,7 @@ router.delete('/:spotId', requireAuth, async (req, res) => {
 //get all reviews based on spots ID
 router.get('/:spotId/reviews', async (req, res) => {
   const spotId = req.params.spotId
-  const Reviews = await Review.findAll({
+  const Reviews = await Review.unscoped().findAll({
     where: {
       spotId: spotId
     },
