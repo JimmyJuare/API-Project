@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Spot, Review, ReviewImage, SpotImage, User } = require('../../db/models');
+const { Spot, Review, ReviewImage, SpotImage, User, Booking } = require('../../db/models');
 const { requireAuth, getAvg } = require('../../utils/auth')
 const { Op, Sequelize } = require('sequelize')
 const { check } = require('express-validator');
@@ -279,4 +279,48 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
     res.status(201).json(newReview)
   }
 })
+//get all bookings for a spot based on the spots id
+router.get('/:spotId/bookings', async (req, res) => {
+
+  
+  const spotId = req.params.spotId
+  const BookingsUser = await Booking.unscoped().findAll({
+    where: {
+      spotId: spotId
+    }
+  })
+
+  if(!BookingsUser.length) {
+    return res.status(404).json({message:"Spot couldn't be found"})
+  }
+
+  if (BookingsUser[0].userId !== req.user.id) {
+    const Bookings = await BookingsUser.map(e => ({
+      spotId:e.spotId,
+      startDate:e.startDate,
+      endDate:e.endDate,
+    }))
+    return res.status(200).json({ Bookings })
+  }
+  
+    const bookings = await Booking.unscoped().findAll({
+      where: {
+        userId:req.user.id,
+        spotId: spotId
+      },
+      include:[User]
+    })
+    const Bookings = await bookings.map(e => ({
+      User:e.User,
+      id:e.id,
+      spotId:e.spotId,
+      userId:e.userId,
+      startDate:e.startDate,
+      endDate:e.endDate,
+      createdAt:e.createdAt,
+      updatedAt:e.updatedAt
+    }))
+    res.status(200).json({ Bookings })
+})
+
 module.exports = router;
