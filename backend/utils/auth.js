@@ -1,8 +1,8 @@
 // backend/utils/auth.js
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User } = require('../db/models');
-
+const { User, Review } = require('../db/models');
+const { Op, Sequelize } = require('sequelize')
 const { secret, expiresIn } = jwtConfig;
 
 // backend/utils/auth.js
@@ -74,7 +74,20 @@ const requireAuth = function (req, _res, next) {
     err.status = 401;
     return next(err);
 }
+async function getAvg(reference, count){
+
+    const countSum = await Review.sum('stars',{
+      where:{
+        spotId:reference
+      },
+      attributes: [[Sequelize.fn('SUM', Sequelize.col('stars')), 'totalRating']],
+    })
+    const totalRating =  countSum || 0
+    
+    const averageRating = totalRating > 0 ? parseFloat((totalRating/count).toFixed(1)) : 0
+  
+    return averageRating
+  }
 
 
-
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+module.exports = { setTokenCookie, restoreUser, requireAuth, getAvg };
