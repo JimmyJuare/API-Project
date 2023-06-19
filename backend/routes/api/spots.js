@@ -338,8 +338,14 @@ router.get('/:spotId/reviews', async (req, res) => {
     where: {
       spotId: spotId
     },
-    include: [User, ReviewImage]
+    include: [{model:User,
+      attributes:{
+      exclude:['username', 'hashedPassword', 
+              'email','createdAt', 'updatedAt']
+      }},
+      ReviewImage]
   })
+
   if (!Reviews.length) {
     res.status(404).json({ message: 'Spot couldn\'t be found' })
   }
@@ -363,6 +369,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
 
     }
   })
+  
   if (!spot) res.status(404).json({ message: "spot couldn\'t be found" })
   if (reviewSpot) res.status(500).json({ message: "User already has a review for this spot" })
   else {
