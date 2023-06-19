@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
     filters.price = { [Op.between]: [minPrice, maxPrice] };
   }
 
-    const spots = await SpotfindAll({
+    const spots = await Spot.findAll({
       where: filters,
       limit: size,
       offset: (page - 1) * size,
