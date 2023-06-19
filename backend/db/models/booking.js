@@ -13,14 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association
       Booking.belongsTo(models.User, {
         foreignKey: 'userId',
-        onDelete: 'CASCADE',
         hooks: true
-      })
+      });
       Booking.belongsTo(models.Spot, {
         foreignKey: 'spotId',
-        onDelete: 'CASCADE',
         hooks: true
-      })
+      });
     }
   }
   Booking.init({
