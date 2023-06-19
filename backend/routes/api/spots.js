@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
     filters.price = { [Op.between]: [minPrice, maxPrice] };
   }
 
-    const spots = await Spot.findAll({
+    const spots = await Spot.unscoped().findAll({
       where: filters,
       limit: size,
       offset: (page - 1) * size,
@@ -235,6 +235,14 @@ router.get('/:spotId', async (req, res) => {
     where: { id: spotId },
     include: [SpotImage, User]
   })
+  const user = await User.findOne({
+    where:{
+        id:req.user.id
+    },
+    attributes:{
+        exclude:["username"]
+    }
+})
 
   if (!spot) {
     res.status(404).json({ message: 'Spot couldn\'t be found' })
@@ -258,7 +266,7 @@ router.get('/:spotId', async (req, res) => {
       numReviews: count,
       avgStarRating: averageStarRating,
       SpotImages: spot.SpotImages,
-      Owners: spot.User
+      Owners: user
     }
     res.status(200).json(result)
   }
@@ -330,8 +338,14 @@ router.get('/:spotId/reviews', async (req, res) => {
     where: {
       spotId: spotId
     },
-    include: [User, ReviewImage]
+    include: [{model:User,
+      attributes:{
+      exclude:['username', 'hashedPassword', 
+              'email','createdAt', 'updatedAt']
+      }},
+      ReviewImage]
   })
+
   if (!Reviews.length) {
     res.status(404).json({ message: 'Spot couldn\'t be found' })
   }
@@ -355,6 +369,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
 
     }
   })
+  
   if (!spot) res.status(404).json({ message: "spot couldn\'t be found" })
   if (reviewSpot) res.status(500).json({ message: "User already has a review for this spot" })
   else {
