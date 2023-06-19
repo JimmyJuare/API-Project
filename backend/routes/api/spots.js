@@ -229,20 +229,17 @@ router.get('/:spotId', async (req, res) => {
   const count = await Review.count({ where: { spotId: spotId } })
 
   const averageStarRating =  await getAvg(spotId, count)
-  console.log('this is the avg rating', averageStarRating);
   
   const spot = await Spot.unscoped().findOne({
     where: { id: spotId },
-    include: [SpotImage, User]
+    include: [SpotImage, 
+      {
+      model:User,
+      attributes:{
+      exclude:['username', 'hashedPassword', 'createdAt', 'updatedAt', 'email']
+    }}
+  ]
   })
-  const user = await User.findOne({
-    where:{
-        id:req.user.id
-    },
-    attributes:{
-        exclude:["username"]
-    }
-})
 
   if (!spot) {
     res.status(404).json({ message: 'Spot couldn\'t be found' })
@@ -266,7 +263,7 @@ router.get('/:spotId', async (req, res) => {
       numReviews: count,
       avgStarRating: averageStarRating,
       SpotImages: spot.SpotImages,
-      Owners: user
+      Owners: spot.User
     }
     res.status(200).json(result)
   }
