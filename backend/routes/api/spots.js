@@ -235,6 +235,14 @@ router.get('/:spotId', async (req, res) => {
     where: { id: spotId },
     include: [SpotImage, User]
   })
+  const user = await User.findOne({
+    where:{
+        id:req.user.id
+    },
+    attributes:{
+        exclude:["username"]
+    }
+})
 
   if (!spot) {
     res.status(404).json({ message: 'Spot couldn\'t be found' })
@@ -258,7 +266,7 @@ router.get('/:spotId', async (req, res) => {
       numReviews: count,
       avgStarRating: averageStarRating,
       SpotImages: spot.SpotImages,
-      Owners: spot.User
+      Owners: user
     }
     res.status(200).json(result)
   }
