@@ -224,52 +224,57 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
 // get details of a Spot from an ID
 router.get('/:spotId', async (req, res) => {
-  const spotId = req.params.spotId
-
-  const count = await Review.count({ where: { spotId: spotId } })
-
-  const averageStarRating =  await getAvg(spotId, count)
-  console.log('this is the avg rating', averageStarRating);
+  try {
+    
+    const spotId = req.params.spotId
   
-  const spot = await Spot.unscoped().findOne({
-    where: { id: spotId },
-    include: [SpotImage, User]
+    const count = await Review.count({ where: { spotId: spotId } })
+  
+    const averageStarRating =  await getAvg(spotId, count)
+    console.log('this is the avg rating', averageStarRating);
+    
+    const spot = await Spot.unscoped().findOne({
+      where: { id: spotId },
+      include: [SpotImage, User]
+    })
+    const user = await User.findOne({
+      where:{
+          id:req.user.id
+      },
+      attributes:{
+          exclude:["username"]
+      }
   })
-  const user = await User.findOne({
-    where:{
-        id:req.user.id
-    },
-    attributes:{
-        exclude:["username"]
+  console.log({User:user});
+  
+    if (!spot) {
+      res.status(404).json({ message: 'Spot couldn\'t be found' })
     }
-})
-console.log({User:user});
-
-  if (!spot) {
-    res.status(404).json({ message: 'Spot couldn\'t be found' })
-  }
-  else {
-
-    const result = {
-      id: spot.id,
-      ownerId: spot.ownerId,
-      address: spot.address,
-      city: spot.city,
-      state: spot.city,
-      country: spot.country,
-      lat: spot.lat,
-      lng: spot.lng,
-      name: spot.name,
-      description: spot.description,
-      price: spot.price,
-      createdAt: spot.createdAt,
-      updatedAt: spot.updatedAt,
-      numReviews: count,
-      avgStarRating: averageStarRating,
-      SpotImages: spot.SpotImages,
-      Owners: user
+    else {
+  
+      const result = {
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.city,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
+        numReviews: count,
+        avgStarRating: averageStarRating,
+        SpotImages: spot.SpotImages,
+        Owners: user
+      }
+      res.status(200).json(result)
     }
-    res.status(200).json(result)
+  } catch (error) {
+    console.log();
   }
 })
 //update a spot
