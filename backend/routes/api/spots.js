@@ -50,12 +50,50 @@ router.get('/', async (req, res) => {
       limit: size,
       offset: (page - 1) * size,
     });
-
+    const userId = req.user.id
+  const spot = await Spot.unscoped().findAll({
+    where: {
+      ownerId: userId
+    }
+  })
+  const spotsData = []
+  for (const spot of spots) {
+      const count = await Review.count({ where: { spotId: spot.id } })
+      const previewImage = await SpotImage.findOne({
+        where: {
+          spotId: spot.id,
+          preview: true,
+        },
+      });
+      
+      const avgRating = await getAvg(spot.id, count)
+      spotsData.push({
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
+        avgRating: avgRating,
+        previewImage: previewImage ? previewImage.url : null,
+      });
+    }
+  if (!spot) {
+    res.status(404).json({ message: 'Spot couldn\'t be found' }) 
+  } else {
     return res.status(200).json({
-      Spots: spots,
+      Spots:spotsData,
       page: Number(page),
       size: Number(size),
     });
+  }
 });
 
 const validateValues = [
@@ -115,8 +153,7 @@ router.get('/current', requireAuth, async (req, res) => {
     spotId:userId
   }
 })
-const previewImage = await PreviewImage.url
-
+const previewImage = await PreviewImage ? PreviewImage.url : null;
 const averageRating = await getAvg(userId, count)
 const avgRating = averageRating
 const Spots = spot.map(e => ({
@@ -362,8 +399,16 @@ router.get('/:spotId/bookings', async (req, res) => {
       },
       include:[User]
     })
+    const user = await User.findOne({
+      where:{
+        id:req.user.id
+      },
+      attributes:{
+        exclude:["username"]
+      }
+    })
     const Bookings = await bookings.map(e => ({
-      User:e.User,
+      User:user,
       id:e.id,
       spotId:e.spotId,
       userId:e.userId,
