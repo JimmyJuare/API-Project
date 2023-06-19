@@ -22,7 +22,14 @@ router.get('/current', requireAuth, async (req, res) => {
         },
         include: [User, Spot, ReviewImage]
     })
-
+    const user = await User.findOne({
+        where:{
+            id:req.user.id
+        },
+        attributes:{
+            exclude:["username"]
+        }
+    })
     const Reviews = await reviews.map(spots =>({
         id:spots.id,
         userId:spots.userId,
@@ -31,7 +38,8 @@ router.get('/current', requireAuth, async (req, res) => {
         stars:spots.stars,
         createdAt:spots.createdAt,
         updatedAt:spots.updatedAt,
-        User:spots.User,
+        User:user,
+        Spot:spots.Spot,
         ReviewImages:spots.ReviewImages
     }))
 
