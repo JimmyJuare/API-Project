@@ -225,7 +225,6 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 // get details of a Spot from an ID
 router.get('/:spotId', async (req, res) => {
   try {
-    
     const spotId = req.params.spotId
   
     const count = await Review.count({ where: { spotId: spotId } })
@@ -274,7 +273,7 @@ router.get('/:spotId', async (req, res) => {
       res.status(200).json(result)
     }
   } catch (error) {
-    console.log();
+    console.error(error);
   }
 })
 //update a spot
