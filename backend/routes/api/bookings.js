@@ -23,20 +23,20 @@ router.get('/current', requireAuth, async (req, res) => {
         }
         , include:[Spot]
     })
-    const PreviewImage = await SpotImage.findOne({
-        where:{
-          spotId:req.user.id
-        }
-      })
 
-      const previewImage = await PreviewImage.url
+      const previewImage = await SpotImage.findOne({
+        where: {
+          spotId: req.user.id,
+          preview: true,
+        },
+      });
 
     const Bookings = bookingsUser.map(booking => ({
         id: booking.id,
         spotId: booking.spotId,
         Spot: {
             id:booking.Spot.id,
-            spotId:booking.Spot.spotId,
+            ownerId:booking.Spot.ownerId,
             address:booking.Spot.address,
             city:booking.Spot.city,
             state:booking.Spot.state,
@@ -45,7 +45,7 @@ router.get('/current', requireAuth, async (req, res) => {
             lng:booking.Spot.lng,
             name:booking.Spot.name,
             price:booking.Spot.price,
-            preview:previewImage
+            previewImage:previewImage ? previewImage.url : null,
         },
         userId: booking.userId,
         startDate: booking.startDate,
