@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
     filters.price = { [Op.between]: [minPrice, maxPrice] };
   }
 
-    const spots = await Spot.unscoped().findAll({
+    const spots = await SpotfindAll({
       where: filters,
       limit: size,
       offset: (page - 1) * size,
@@ -224,56 +224,51 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
 // get details of a Spot from an ID
 router.get('/:spotId', async (req, res) => {
-  try {
-    const spotId = req.params.spotId
+  const spotId = req.params.spotId
+
+  const count = await Review.count({ where: { spotId: spotId } })
+
+  const averageStarRating =  await getAvg(spotId, count)
+  console.log('this is the avg rating', averageStarRating);
   
-    const count = await Review.count({ where: { spotId: spotId } })
-  
-    const averageStarRating =  await getAvg(spotId, count)
-    console.log('this is the avg rating', averageStarRating);
-    
-    const spot = await Spot.unscoped().findOne({
-      where: { id: spotId },
-      include: [SpotImage, User]
-    })
-    const user = await User.findOne({
-      where:{
-          id:req.user.id
-      },
-      attributes:{
-          exclude:["username"]
-      }
+  const spot = await Spot.unscoped().findOne({
+    where: { id: spotId },
+    include: [SpotImage, User]
   })
-  console.log({User:user});
-  
-    if (!spot) {
-      res.status(404).json({ message: 'Spot couldn\'t be found' })
+  const user = await User.findOne({
+    where:{
+        id:req.user.id
+    },
+    attributes:{
+        exclude:["username"]
     }
-    else {
-  
-      const result = {
-        id: spot.id,
-        ownerId: spot.ownerId,
-        address: spot.address,
-        city: spot.city,
-        state: spot.city,
-        country: spot.country,
-        lat: spot.lat,
-        lng: spot.lng,
-        name: spot.name,
-        description: spot.description,
-        price: spot.price,
-        createdAt: spot.createdAt,
-        updatedAt: spot.updatedAt,
-        numReviews: count,
-        avgStarRating: averageStarRating,
-        SpotImages: spot.SpotImages,
-        Owners: user
-      }
-      res.status(200).json(result)
+})
+
+  if (!spot) {
+    res.status(404).json({ message: 'Spot couldn\'t be found' })
+  }
+  else {
+
+    const result = {
+      id: spot.id,
+      ownerId: spot.ownerId,
+      address: spot.address,
+      city: spot.city,
+      state: spot.city,
+      country: spot.country,
+      lat: spot.lat,
+      lng: spot.lng,
+      name: spot.name,
+      description: spot.description,
+      price: spot.price,
+      createdAt: spot.createdAt,
+      updatedAt: spot.updatedAt,
+      numReviews: count,
+      avgStarRating: averageStarRating,
+      SpotImages: spot.SpotImages,
+      Owners: user
     }
-  } catch (error) {
-    console.error(error);
+    res.status(200).json(result)
   }
 })
 //update a spot
