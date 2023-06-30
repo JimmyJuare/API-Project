@@ -2,7 +2,9 @@
 import {combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { legacy_createStore as createStore } from 'redux';
-
+import { restoreCSRF, csrfFetch } from './csrf';
+// frontend/src/index.js
+// ... other imports
 
 
 
@@ -29,6 +31,14 @@ if (process.env.NODE_ENV === 'production') {
 
 const configureStore = (preloadedState) => {
     return createStore(rootReducer, preloadedState, enhancer);
-  };
-  
-  export default configureStore;
+};
+const store = configureStore();
+
+if (process.env.NODE_ENV !== 'production') {
+  restoreCSRF();
+
+  window.csrfFetch = csrfFetch;
+  window.store = store;
+}
+
+export default configureStore;
