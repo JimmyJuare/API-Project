@@ -53,3 +53,25 @@
         background-color: black;
         margin: 2px 0;
 }
+.outer-menu{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.user-info{
+   position: absolute;
+   flex-direction: column;
+   display: flex;
+   text-decoration: none;
+   background-color: white;
+   padding: 10px;
+   right:70px;
+   list-style: none;
+}
+.user-info li{
+   padding: 5px;
+}
+.user-info li :hover{
+   background: var(--gray);
+}
