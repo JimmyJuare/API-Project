@@ -1,3 +1,77 @@
+:root {
+    --red: #FF385C;
+    --gray: #D3D3D3;
+  }
+  
 .hidden{
     display:none;
+}
+.navBar{
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #D3D3D3;
+    padding: 0px 40px;
+    list-style: none;
+}
+.logo{
+    height: 75px;
+    width: 140px;
+    cursor: pointer;
+    margin-top:7.5px;
+}
+.user-menu{
+    width: 77px;
+    height: 42px;
+    border: 1px solid #D3D3D3;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 21px;
+    padding: 5px 5px 5px 12px;
+    background-color: white;
+    cursor: pointer;
+}
+.user-menu:hover{
+    transition: 450ms;
+    filter: drop-shadow(1.5px 1.5px 5px rgba(0, 0, 0, 0.5));
+}
+.fas {
+        font-size: 30px;
+        width: 30px;
+        height: 30px; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #717171;
+        padding-left: 5px;
+}
+.inner-menu div{
+        width: 15px;
+        height: 2px;
+        background-color: black;
+        margin: 2px 0;
+}
+.outer-menu{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.user-info{
+   position: absolute;
+   flex-direction: column;
+   display: flex;
+   text-decoration: none;
+   background-color: white;
+   padding: 10px;
+   right:70px;
+   list-style: none;
+}
+.user-info li{
+   padding: 5px;
+}
+.user-info li :hover{
+   background: var(--gray);
 }
