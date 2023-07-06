@@ -1,0 +1,33 @@
+.wrapper{
+    display: flex;
+    box-sizing: border-box;
+    padding: 1rem;
+    margin: 1rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.spot-item{
+    display: flex;
+    flex-direction: column;
+    margin:0.5rem;
+    border: 1px solid lightgray;
+    border-radius: 21px;
+    cursor: pointer;
+    flex-basis: calc(25% - 1rem);
+    max-width: 25%;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: inherit;
+}
+.spot-item img{
+    width: 100%;
+    height: auto;
+    border-radius: 21px;
+    flex-basis: 25%;
+}
+.info{
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+}

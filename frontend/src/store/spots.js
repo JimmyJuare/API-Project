@@ -2,12 +2,19 @@
 import { csrfFetch } from "./csrf";
 
 const SET_SPOTS = 'spots/setSpots'
+const GET_SPOTS = 'spots/getSpotbyId'
 //action creators
 
 const setSpots = (spots) => {
   return {
     type: SET_SPOTS,
     payload:spots
+  };
+};
+const getSpot = (spotsbyId) => {
+  return {
+    type: GET_SPOTS,
+    payload:spotsbyId
   };
 };
 
@@ -20,8 +27,23 @@ export const getAllSpots = () => async(dispatch) =>{
     dispatch(setSpots(spots))
   }
 }
+export const getSpotbyId = (spotId) => async(dispatch) =>{
+  try{
+  const response = await csrfFetch(`/api/spots/${spotId}`);
+  if(response.ok){
+    const spot = await response.json()
+    dispatch(getSpot(spot))
+  }  else {
+    // Handle the case when the response is not ok (e.g., error status)
+    console.error('Error occurred:', response);
+  }
+} catch (error) {
+  // Handle any other errors that occurred during the request
+  console.error('Error occurred:', error);
+}
+}
  
-const initialState = { spots:[] };
+const initialState = { spots:{} };
 
 const spotsReducer = (state = initialState, action) => {
   let newState;
@@ -31,6 +53,10 @@ const spotsReducer = (state = initialState, action) => {
         ...state,
         spots:action.payload
       }
+    case GET_SPOTS:
+      newState = Object.assign({}, state)
+      newState.spotsbyId = action.payload
+      return newState
     default:
       return state;
   }

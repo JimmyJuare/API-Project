@@ -6,7 +6,8 @@ const { Op, Sequelize } = require('sequelize')
 const { check, body } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { user } = require('pg/lib/defaults');
-//gets all spots
+
+// Gets all spots
 router.get('/', async (req, res) => {
   const {
     page = 1,
@@ -45,28 +46,24 @@ router.get('/', async (req, res) => {
     filters.price = { [Op.between]: [minPrice, maxPrice] };
   }
 
+  try {
     const spots = await Spot.findAll({
       where: filters,
       limit: size,
       offset: (page - 1) * size,
     });
-    const userId = req.user.id
-  const spot = await Spot.unscoped().findAll({
-    where: {
-      ownerId: userId
-    }
-  })
-  const spotsData = []
-  for (const spot of spots) {
-      const count = await Review.count({ where: { spotId: spot.id } })
+
+    const spotsData = [];
+    for (const spot of spots) {
+      const count = await Review.count({ where: { spotId: spot.id } });
       const previewImage = await SpotImage.findOne({
         where: {
           spotId: spot.id,
           preview: true,
         },
       });
-      
-      const avgRating = await getAvg(spot.id, count)
+
+      const avgRating = await getAvg(spot.id, count);
       spotsData.push({
         id: spot.id,
         ownerId: spot.ownerId,
@@ -85,16 +82,17 @@ router.get('/', async (req, res) => {
         previewImage: previewImage ? previewImage.url : null,
       });
     }
-  if (!spot) {
-    res.status(404).json({ message: 'Spot couldn\'t be found' }) 
-  } else {
+
     return res.status(200).json({
-      Spots:spotsData,
+      Spots: spotsData,
       page: Number(page),
       size: Number(size),
     });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 const validateValues = [
   check('address')
