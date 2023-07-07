@@ -38,7 +38,9 @@ function LandingPage() {
                                 </div>
                                     <div className='rating'>
                                         <i class="fa-sharp fa-solid fa-star"></i>
-                                        <p>{spot.avgRating}</p>
+                                        {spot.avgRating === 0 ? (
+                                            <p>new</p>
+                                        ) : (<p>{spot.avgRating}</p>)}
                                     </div>
                             </div>
                         </Link>
