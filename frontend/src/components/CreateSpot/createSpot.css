@@ -31,12 +31,18 @@ input{
 }
 .description{
     margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    
 }
 .upper-form label h2{
     padding-bottom: 0.7rem;
 }
 .upper-form label h3{
     padding-bottom: 5px;
+}
+.upper-form label {
+    display: flex;
 }
 .input-field{
     display: flex;
@@ -73,4 +79,10 @@ input{
     outline: none;
     padding: 1.5rem;
     margin-top: 1rem;
+}
+.errors{
+    color: red;
+    display: flex;
+    margin-left: 1rem;
+    flex-wrap: nowrap;
 }

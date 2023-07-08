@@ -14,6 +14,12 @@ const getSpots = (spots) => {
     payload: spots
   };
 };
+const setSpots = (spot) => {
+  return {
+    type: SET_SPOTS,
+    payload: spot
+  };
+};
 const getSpot = (spotsbyId) => {
   return {
     type: GET_SPOTS,
@@ -42,13 +48,25 @@ export const getAllSpots = () => async (dispatch) => {
     dispatch(getSpots(spots))
   }
 }
-export const setSpot = (spot) => async (dispatch) => {
+export const thunkSetSpot = (spot) => async (dispatch) => {
   const {address, city,state,country, name, description,price} = spot
-  const response = await csrfFetch('/api/spots');
+  const response = await csrfFetch('/api/spots', {
+    method:'POST',
+    body:JSON.stringify({
+      address,
+      city,
+      state,
+      country,
+      name,
+      description,
+      price
+    })
+  });
   if (response.ok) {
-    const spots = await response.json()
-    console.log(spots);
-    dispatch(getSpots(spots))
+    const data = await response.json()
+    dispatch(setSpots(data.spot))
+
+    return data
   }
 }
 export const getSpotbyId = (spotId) => async (dispatch) => {
@@ -118,6 +136,10 @@ const spotsReducer = (state = initialState, action) => {
     case GET_CURRENT_SPOT:
       newState = Object.assign({}, state)
       newState.currentSpot = action.payload
+      return newState
+    case SET_SPOTS:
+      newState = Object.assign({}, state)
+      newState.newSpot = action.payload
       return newState
     default:
       return state;

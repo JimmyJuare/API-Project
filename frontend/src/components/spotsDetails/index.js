@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import './spotsDetails.css'
 function SpotsDetails() {
     const img = <img src='https://png-files-for-api.s3.us-east-2.amazonaws.com/png/photo-1600596542815-ffad4c1539a9.jpg'></img>
-    const insideImg = <img src='https://png-files-for-api.s3.us-east-2.amazonaws.com/png/inside-house.jpg'></img>
+    const arr = 'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/inside-house.jpg'
     const dispatch = useDispatch()
     const { spotId } = useParams()
     const sessionUser = useSelector(state => state.session.user);
@@ -30,18 +30,17 @@ function SpotsDetails() {
                                 {img}
                             </div>
                             <div className='right-pics'>
-                                {insideImg}
-                                {insideImg}
-                                {insideImg}
-                                {insideImg}
+                                {spot.SpotImages[0] ? (spot.SpotImages[0]):(<img src={arr} alt='image'></img>)}
+                                {spot.SpotImages[1] ? (spot.SpotImages[1]):(<img src={arr} alt='image'></img>)}
+                                {spot.SpotImages[2] ? (spot.SpotImages[2]):(<img src={arr} alt='image'></img>)}
+                                {spot.SpotImages[3] ? (spot.SpotImages[3]):(<img src={arr} alt='image'></img>)}
                             </div>
                         </div>
                         <div className='host-info'>
                             <div className='left-info'>
                                 <h3>Hosted by {spot.Owners.firstName} {spot.Owners.lastName}</h3>
                                 <p>
-                                    {spot.description}
-                                    Lorem ipsum dolor sit amet,
+                                    {spot.description  ? spot.description : (<p> Lorem ipsum dolor sit amet,
                                     consectetur adipiscing elit,
                                     sed do eiusmod tempor incididunt
                                     ut labore et dolore magna aliqua.
@@ -55,7 +54,7 @@ function SpotsDetails() {
                                     Excepteur sint occaecat cupidatat
                                     non proident, sunt in culpa qui
                                     officia deserunt mollit anim id
-                                    est laborum.
+                                    est laborum.</p>)}
                                 </p>
                             </div>
                             <div className='right-info'>
@@ -63,7 +62,7 @@ function SpotsDetails() {
                                     <div className='top-info'>
 
                                         <div className='card-left'>
-                                            <h2>${spot.price}0</h2>
+                                            <h2>${spot.price}</h2>
                                             <p>night</p>
                                         </div>
                                         <div className='card-right'>
