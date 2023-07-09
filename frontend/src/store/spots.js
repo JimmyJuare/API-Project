@@ -2,6 +2,7 @@
 import { csrfFetch } from "./csrf";
 
 const SET_SPOTS = 'spots/setSpots'
+const SET_SPOTS_IMAGES = 'spots/setSpotImages'
 const GET_SPOTS = 'spots/getSpotbyId'
 const GET_ALL_SPOTS = 'spots/getAllSpots'
 const GET_SPOT_REVIEWS = 'spots/getSpotReview'
@@ -18,6 +19,12 @@ const setSpots = (spot) => {
   return {
     type: SET_SPOTS,
     payload: spot
+  };
+};
+const setSpotsImages = (spotImages) => {
+  return {
+    type:SET_SPOTS_IMAGES,
+    payload: spotImages
   };
 };
 const getSpot = (spotsbyId) => {
@@ -67,6 +74,25 @@ export const thunkSetSpot = (spot) => async (dispatch) => {
     dispatch(setSpots(data.spot))
 
     return data
+  }
+}
+export const thunkSetSpotImages = (url, spotId, preview = false) => async (dispatch) => {
+
+  console.log('this is the url');
+  
+  const response = await csrfFetch(`/api/spots/${spotId}/images`, {
+    method:'POST',
+    body:JSON.stringify({url, preview})
+  });
+  if (response.ok) {
+    const data = await response.json()
+    console.log(data);
+    dispatch(setSpotsImages(data))
+
+    return data
+  } else {
+    // Handle the case when the response is not ok (e.g., error status)
+    console.error('Error occurred:', response);
   }
 }
 export const getSpotbyId = (spotId) => async (dispatch) => {
@@ -140,6 +166,10 @@ const spotsReducer = (state = initialState, action) => {
     case SET_SPOTS:
       newState = Object.assign({}, state)
       newState.newSpot = action.payload
+      return newState
+    case SET_SPOTS_IMAGES:
+      newState = Object.assign({}, state)
+      newState.SpotImages = action.payload
       return newState
     default:
       return state;
