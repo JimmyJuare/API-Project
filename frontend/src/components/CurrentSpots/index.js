@@ -24,10 +24,11 @@ function CurrentSpots(){
     ]
     return(
         <>
+        
         {spots.Spots && (
             spots.Spots.map((spot, index) => (
                 <>
-                <div className='spot-item'>
+                <div className='spot-item' key={spot.id}>
                 <Link to={`/spots/${spot.id}`} key={spot.id} className='item'>
                             
                 <img src={arr[index % arr.length]} alt="Spot" />

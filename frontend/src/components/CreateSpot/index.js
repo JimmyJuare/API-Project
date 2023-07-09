@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom/';
-import { thunkSetSpot } from '../../store/spots';
-import { getSpotbyId } from '../../store/spots';
+import { thunkSetSpot, thunkSetSpotImages } from '../../store/spots';
 
 import './createSpot.css'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 function CreateSpot() {
     const [country, setCountry] = useState('')
     const [address, setAddress] = useState('')
@@ -19,6 +18,7 @@ function CreateSpot() {
     const [url2, newUrl2] = useState('')
     const [url3, newUrl3] = useState('')
     const [url4, newUrl4] = useState('')
+    const [urls, setUrls] = useState(['','','','',''])
     const history = useHistory()
     const dispatch = useDispatch()
     const  handleSubmit = async(e) => {
@@ -33,9 +33,9 @@ function CreateSpot() {
         if (!description.length) errors.text = 'Description needs a minimum of 30 characters'
         if (!name.length) errors.name = 'Name is required'
         if (!price.length) errors.price = 'Price is required'
-        if (!prevImg.length) errors.prevImg = 'Preview Image is required'
-        if (!url1.length) errors.url1 = 'Image URL must end in .png, .jpg, or .jpeg'
-
+        if (!urls[0].length) errors.prevImg = 'Preview Image is required'
+        if (!urls[1].length) errors.url1 = 'Image URL must end in .png, .jpg, or .jpeg'
+        console.log(errors);
         if (Object.keys(errors).length === 0) {
             // If no errors, proceed with form submission
             const spotData = {
@@ -48,12 +48,28 @@ function CreateSpot() {
                 price,
             };
       
+            const url = {
+                url1
+            };
+            
             const newSpot = await dispatch(thunkSetSpot(spotData));
             console.log(newSpot);
             if (newSpot) {
+                console.log('dispatching spotImages');
+                const filteredUrls = urls.filter(u => u !== '')
+                console.log(filteredUrls);
+                const newSpotId = newSpot.id; // Obtain the new spot's ID
+                for (let i = 0; i < filteredUrls.length; i++) {
+                    console.log('this is running');
+                    const url = urls[i];
+                    if (i === 0) {
+                        await dispatch(thunkSetSpotImages(url, newSpotId, true))
+                    } else{
+                        await dispatch(thunkSetSpotImages(url, newSpotId)) 
+                    }
+
                 
-              const newSpotId = newSpot.id; // Obtain the new spot's ID
-              
+            }
               // Redirect to the new spot's page
               history.push(`/spots/${newSpotId}`);
             }
@@ -154,13 +170,18 @@ function CreateSpot() {
                             <h2>Liven up your spot with photos</h2>
                             <p>Submit a link to at least one photo to publish your spot.</p>
                         </label>
-                        <input value={prevImg} onChange={e => newPrevImg(e.target.value)} placeholder='Preview Image URL'></input>
+                        {/* <input value={prevImg} onChange={e => newPrevImg(e.target.value)} placeholder='Preview Image URL'></input>
                         <p className='errors'>{Errors.prevImg}</p>
                         <input value={url1} onChange={e => newUrl1(e.target.value)} placeholder='Image URL'></input>
                         <p className='errors'>{Errors.url1}</p>
                         <input value={url2} onChange={e => newUrl2(e.target.value)} placeholder='Image URL'></input>
                         <input value={url3} onChange={e => newUrl3(e.target.value)} placeholder='Image URL'></input>
-                        <input value={url4} onChange={e => newUrl4(e.target.value)} placeholder='Image URL'></input>
+                        <input value={url4} onChange={e => newUrl4(e.target.value)} placeholder='Image URL'></input> */}
+                        {urls.map((url, i) => (<input value={url} key={i} placeholder={i === 0 ? 'Preview Image URL' : 'Image URL'} onChange={(e) => {
+                            const newUrls = [...urls]
+                            newUrls[i] = e.target.value
+                            setUrls(newUrls)
+                        }}/>))}
                     </div>
 
                     <div className='button'>
