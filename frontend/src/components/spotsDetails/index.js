@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import './spotsDetails.css'
 function SpotsDetails() {
     const img = <img src='https://png-files-for-api.s3.us-east-2.amazonaws.com/png/photo-1600596542815-ffad4c1539a9.jpg'></img>
-    const arr = 'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/inside-house.jpg'
     const dispatch = useDispatch()
     const { spotId } = useParams()
     const sessionUser = useSelector(state => state.session.user);
