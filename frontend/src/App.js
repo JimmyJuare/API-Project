@@ -6,7 +6,9 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
 import SpotsDetails from "./components/spotsDetails";
+import CreateSpot from "./components/CreateSpot";
 import { Route } from "react-router-dom";
+import CurrentSpots from "./components/CurrentSpots";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,6 +27,12 @@ function App() {
         </Route>
         <Route exact path="/spots/:spotId">
           <SpotsDetails />
+        </Route>
+        <Route exact path="/spots">
+          <CreateSpot />
+        </Route>
+        <Route exact path="/current">
+          <CurrentSpots />
         </Route>
       </Switch>)}
     </>

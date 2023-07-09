@@ -1,0 +1,23 @@
+.delete-and-update{
+    display: flex; 
+    justify-content: space-evenly;
+    padding: 1rem;
+}
+.delete-and-update button{
+    width: 50%;
+    border: 2px solid black;
+    background-color: rgb(88, 88, 88);
+    color: white;
+    font-size: 17px;
+    padding: 0.5rem;
+    margin: 1rem;
+    cursor: pointer;
+    filter: drop-shadow(3px 3px 1px black);
+}
+
+.item{
+    color: inherit;
+    text-decoration: none;
+    list-style: none;
+    
+}

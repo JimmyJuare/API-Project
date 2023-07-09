@@ -9,33 +9,41 @@
 .header-info {
     display: flex;
     padding-top: 1rem;
-}
-
-.right-pics img {
-    width: 100%;
-    height: auto;
-    flex-basis: 50%;
+    flex-wrap: nowrap;
 }
 .pictures {
-display: flex;
-box-sizing: border-box;
-padding-right: 1rem;
-}
-.right-pics {
+    display: flex;
+    box-sizing: border-box;
+    height: 100%;
     width: 100%;
-    height: auto;
-   display: flex;
-   flex-wrap: wrap;
-   box-sizing: border-box;
-   padding-left: 1rem;
-}
+  }
+  
+  .left-pic {
+    flex-basis: 50%;
+    overflow: hidden;
+    display: flex;
+    margin-right:2px;
+  }
+  
+  .left-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .right-pics {
+    flex-basis: 50%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2px;
+  }
+  
+  .right-pics img {
+    width: 100%;
+    height: 100%;
+  }
 
-.pictures img {
-    width: 50%;
-    height: auto;
-
-    margin-top: 1rem;
-}
 .host-info{
     display: flex;
     flex-basis: 50%;
@@ -114,11 +122,20 @@ padding-right: 1rem;
 .reviews{
     display:flex;
     box-sizing: border-box;
-    flex-basis: 50%;
+    align-items: baseline;
+    font-size: 14px;
+    justify-content: start;
+    align-items: flex-start;
+    text-align:start;
+    width: 10%;
+}
+.review{
+    display:flex;
+    box-sizing: border-box;
+    flex-direction: column;
     align-items: baseline;
     justify-content: space-evenly;
     font-size: 14px;
-    height:;
 }
 .first-star{
     display: flex;
@@ -146,13 +163,14 @@ padding-right: 1rem;
 
 .review-wrapper{
     display: flex;
+    flex-direction: column;
 }
 .review-info{
     display:flex;
     box-sizing: border-box;
-    flex-basis: 10%;
-    align-items: center;
-    justify-content: space-evenly;
+
+    align-items:flex-start;
+    justify-content: flex-start;
     font-size: 14px;
     border: 1px solid black;
 }
@@ -163,5 +181,9 @@ padding-right: 1rem;
     align-items: center;
     justify-content: space-evenly;
     font-size: 14px;
-    height:;
+    height:auto;
+}
+.numReview{
+    margin-right: 1rem;
+    margin-left: 1rem;
 }

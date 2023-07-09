@@ -31,3 +31,16 @@
     justify-content: space-between;
     list-style: none;
 }
+.rating{
+    display: flex;
+    justify-content: space-evenly;
+}
+.new{
+    display: flex;
+   padding-left: 0.5rem;
+   justify-content: flex-end;
+}
+.reviews{
+    display: flex;
+    justify-content: space-between;
+}
