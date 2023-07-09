@@ -22,17 +22,17 @@ module.exports = {
     await SpotImage.bulkCreate([
      {
      spotId: 1,
-     url: 'image url',
+     url: 'https://a0.muscache.com/im/pictures/e7e72c42-3268-4e06-992b-bb75b6aa0a00.jpg?im_w=720',
      preview:true
    },
      {
      spotId: 2,
-     url: 'image url 2',
+     url: 'https://a0.muscache.com/im/pictures/e7e72c42-3268-4e06-992b-bb75b6aa0a00.jpg?im_w=720',
      preview:false
    },
      {
      spotId: 3,
-     url: 'image url 3',
+     url: 'https://a0.muscache.com/im/pictures/e7e72c42-3268-4e06-992b-bb75b6aa0a00.jpg?im_w=720',
      preview:true
    },
  ], {validate:true})
