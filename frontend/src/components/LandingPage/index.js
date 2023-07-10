@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { getAllSpots, getSpotbyId } from '../../store/spots'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
+import { useState } from 'react';
 import './spots.css'
 import { Link } from 'react-router-dom/';
 function LandingPage() {
+    const [shouldRefresh, setShouldRefresh] = useState(false);
     const arr =
         [
             'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/depositphotos_57659575-stock-photo-beach-house.jpg',
@@ -16,6 +18,17 @@ function LandingPage() {
         ]
     const dispatch = useDispatch()
     const spots = useSelector((state) => state.spots.spots.Spots);
+
+    useEffect(() => {
+        if (shouldRefresh) {
+          setShouldRefresh(false);
+          window.location.reload();
+        }
+      }, [shouldRefresh]);
+
+  const handleSpotClick = () => {
+    setShouldRefresh(true);
+  };
     let spot;
     useEffect(() => {
         dispatch(getAllSpots())
@@ -29,7 +42,7 @@ function LandingPage() {
                 {spots && (
                     <>
                         {spots.map((spot, index) => (
-                            <Link to={`/spots/${spot.id}`} key={spot.id} className='spot-item'>
+                            <Link to={`/spots/${spot.id}`} key={spot.id} onClick={handleSpotClick} className='spot-item'>
 
                                 <img className='image' src={spot.previewImage}
                                     alt="Spot" />

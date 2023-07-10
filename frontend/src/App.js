@@ -9,6 +9,7 @@ import SpotsDetails from "./components/spotsDetails";
 import CreateSpot from "./components/CreateSpot";
 import { Route } from "react-router-dom";
 import CurrentSpots from "./components/CurrentSpots";
+import UpdateSpot from "./components/updateSpot";
 
 function App() {
   const dispatch = useDispatch();
@@ -33,6 +34,9 @@ function App() {
         </Route>
         <Route exact path="/current">
           <CurrentSpots />
+        </Route>
+        <Route path="/spots/:spotId/edit">
+          <UpdateSpot />
         </Route>
       </Switch>)}
     </>

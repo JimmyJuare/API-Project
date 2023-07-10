@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom/';
-import { thunkSetSpot, thunkSetSpotImages } from '../../store/spots';
+import { thunkSetSpotImages, thunkUpdateSpot } from '../../store/spots';
+import { useParams } from 'react-router-dom';
 
-import './createSpot.css'
+import './updateSpot.css'
 import { useDispatch } from 'react-redux';
-function CreateSpot() {
+function UpdateSpot() {
+    const { spotId } = useParams();
     const [country, setCountry] = useState('')
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
@@ -47,12 +49,8 @@ function CreateSpot() {
                 description,
                 price,
             };
-      
-            const url = {
-                url1
-            };
             
-            const newSpot = await dispatch(thunkSetSpot(spotData));
+            const newSpot = await dispatch(thunkUpdateSpot(spotId,spotData));
             console.log(newSpot);
             if (newSpot && newSpot.id) {
                 console.log('dispatching spotImages');
@@ -199,4 +197,4 @@ function CreateSpot() {
     )
 }
 
-export default CreateSpot
+export default UpdateSpot

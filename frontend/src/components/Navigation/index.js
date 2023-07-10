@@ -19,7 +19,7 @@ function Navigation({ isLoaded }) {
         {sessionUser ? (
           <>
           <div className='navBar-right'>
-            <Link to='/spots'>Create a spot</Link>
+            <Link id='link' to='/spots'>Create a spot</Link>
             <li>
               <ProfileButton user={sessionUser} />
             </li>
