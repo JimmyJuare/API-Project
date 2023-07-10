@@ -1,59 +1,88 @@
-import React, { useEffect } from 'react';
-import { getCurrSpots } from '../../store/spots';
-import { Link } from 'react-router-dom/';
-import './CurrentSpot.css'
+import React, { useEffect, useState } from 'react';
+import { getCurrSpots, thunkDeleteSpot } from '../../store/spots';
+import { Link } from 'react-router-dom';
+import './CurrentSpot.css';
 import { useDispatch, useSelector } from 'react-redux';
-function CurrentSpots(){
-    const dispatch = useDispatch()
-    const spots = useSelector((state) => state.spots.currentSpot)
+import { useHistory } from 'react-router-dom';
+import { useModal } from '../../context/Modal';
+import DeleteModal from '../deleteModal';
+
+function CurrentSpots() {
+    const { setModalContent } = useModal();
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const spots = useSelector((state) => state.spots.currentSpot);
+    const [selectedSpotId, setSelectedSpotId] = useState(null);
+
     useEffect(() => {
-        dispatch(getCurrSpots())
+        dispatch(getCurrSpots());
     }, [dispatch]);
+
+    const handleDelete = (spotId) => {
+        setSelectedSpotId(spotId);
+        const content = <DeleteModal spotId={spotId} onDelete={handleDeleteSpot} onCancel={handleCancelDelete} />;
+        setModalContent(content);
+    };
+
+    const handleDeleteSpot = () => {
+        dispatch(thunkDeleteSpot(selectedSpotId)).then(() => {
+            dispatch(getCurrSpots()); // Fetch the updated list of spots
+            closeModal();
+        });
+    };
+
+    const handleCancelDelete = () => {
+        closeModal();
+    };
+
+    const closeModal = () => {
+        setModalContent(null);
+    };
+
     if (!spots) {
         return <div>Loading...</div>; // Display a loading state until spots are fetched
     }
-    const arr =
-    [
-        'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/depositphotos_57659575-stock-photo-beach-house.jpg',
-        'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/istockphoto-1393537665-612x612.jpg',
-        'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/photo-1600596542815-ffad4c1539a9.jpg',
-        'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/pexels-simon-sikorski-1131573.jpg',
-        'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/istockphoto-522540838-612x612.jpg',
-        'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/istockphoto-922534026-612x612.jpg',
-        'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/Screen-Shot-2017-02-16-at-4.08.29-PM.png'
-    ]
-    return(
-        <>
-        
-        {spots.Spots && (
-            spots.Spots.map((spot, index) => (
-                <>
-                <div className='spot-item' key={spot.id}>
-                <Link to={`/spots/${spot.id}`} key={spot.id} className='item'>
-                            
-                <img src={arr[index % arr.length]} alt="Spot" />
-                <div className='info'>
-                    <div className='inner-info'>
-                        <p><strong>{spot.city}, {spot.state}</strong></p>
-                        <p>${spot.price} night</p>
-                    </div>
-                        <div className='rating'>
-                            <i class="fa-sharp fa-solid fa-star"></i>
-                            <p>{spot.avgRating}</p>
-                        </div>
-                </div>
-            </Link>
 
-                <div className='delete-and-update'>
-                    <button>Update</button>
-                    <button>Delete</button>
+    return (
+        <>
+            <div className="current-wrapper">
+                <div id="top-info">
+                    <h2>Manage Your Spots</h2>
+                    <Link id="link" to="/spots">
+                        Create a spot
+                    </Link>
                 </div>
+                <div id="inner-wrapper">
+                    {spots.Spots &&
+                        spots.Spots.map((spot, index) => (
+                            <div id="spot-item" key={spot.id}>
+                                <Link to={`/spots/${spot.id}`} key={spot.id} className="item">
+                                    <img src={spot.previewImage} alt="Spot" />
+                                    <div className="info">
+                                        <div className="inner-info">
+                                            <p>
+                                                <strong>{spot.city}, {spot.state}</strong>
+                                            </p>
+                                            <p>${spot.price} night</p>
+                                        </div>
+                                        <div className="rating">
+                                            <i class="fa-sharp fa-solid fa-star"></i>
+                                            <p>{spot.avgRating}</p>
+                                        </div>
+                                    </div>
+                                </Link>
+                                <div className="delete-and-update">
+                                    <Link to={`/spots/${spot.id}/edit`} key={spot.id} className="update-button">
+                                        Update
+                                    </Link>
+                                    <button onClick={() => handleDelete(spot.id)}>Delete</button>
+                                </div>
+                            </div>
+                        ))}
                 </div>
-            </>
-                ))
-        )}
+            </div>
         </>
-    )
+    );
 }
 
-export default CurrentSpots
+export default CurrentSpots;

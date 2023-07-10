@@ -1,0 +1,33 @@
+.sign-up form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin:2rem; /* Add margin: 0 auto to horizontally center the form */
+  }
+  
+  .sign-up form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    box-sizing: border-box; /* Add box-sizing to include padding and borders within the width */
+  }
+  
+  .sign-up h1 {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .sign-up {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 100%; /* Add height: 100% to ensure the container occupies the full height */
+  }
+  .sign-up button{
+    padding: 1rem;
+    filter: drop-shadow(4px 4px 1px lightgray);
+    cursor: pointer;
+  }
+  

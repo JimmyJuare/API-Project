@@ -78,11 +78,8 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [10, 256]
-      }
+      type: DataTypes.TEXT,
+      allowNull: false
     },
     price: {
       type: DataTypes.DECIMAL(5, 2), // Maximum 5 digits with 2 decimal places

@@ -1,0 +1,27 @@
+.reviewModal{
+    display: flex;
+    flex-direction: row;
+    width: 500px;
+    height: fit-content;
+    flex-wrap: wrap;
+}
+.reviewModal form{
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    height: 200px;
+}
+.rating-input .filled {
+    color: black;
+  }
+  
+.rating-input {
+    display: flex;
+  }
+  
+  .rating-input .empty {
+    color: darkgray;
+  }
+.review-error{
+  color: red;
+}

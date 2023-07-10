@@ -14,7 +14,7 @@
 .pictures {
     display: flex;
     box-sizing: border-box;
-    height: 100%;
+    height: 400px;
     width: 100%;
   }
   
@@ -22,12 +22,13 @@
     flex-basis: 50%;
     overflow: hidden;
     display: flex;
-    margin-right:2px;
+    margin-right:0.5rem;
+    height: 400px;
   }
   
   .left-pic img {
     width: 100%;
-    height: 100%;
+    height: 400px;
     object-fit: cover;
   }
   
@@ -36,12 +37,18 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 2px;
+    gap: 0.5rem;
+    box-sizing: border-box;
+    height: 400px;
+    overflow: hidden;
   }
   
   .right-pics img {
+    display: flex;
+    box-sizing: border-box;
     width: 100%;
-    height: 100%;
+    height: 200px;
+    object-fit: cover;
   }
 
 .host-info{
@@ -84,14 +91,17 @@
     display: flex;
     box-sizing: border-box;
     width: 100%;
-    padding: 1rem;
+    padding: 0.5rem;
+    align-items: center;
+    align-items: center;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 .card-left{
     display:flex;
     align-items: baseline;
     font-size: 15px;
+    margin-left: 2rem;
 }
 .card-right{
     display:flex;
@@ -100,13 +110,15 @@
     flex-basis: 50%;
 }
 .rating-info{
+    padding-left: 1rem;
+    padding-right: 1rem;
     display:flex;
     border-left: 2px solid lightgray;
     flex-direction: row;
     box-sizing: border-box;
     flex-basis: 50%;
     align-items:baseline;
-    justify-content: space-evenly;
+    justify-content: baseline;
     height: fit-content;
     border-right: 2px solid lightgray;
 }
@@ -128,6 +140,17 @@
     align-items: flex-start;
     text-align:start;
     width: 10%;
+}
+.card-reviews{
+    width: 100%;
+    display:flex;
+    box-sizing: border-box;
+    align-items: baseline;
+    font-size: 20px;
+    text-align:center;
+    justify-content: flex-end;
+    width: 100%;
+    margin-right: 2rem;
 }
 .review{
     display:flex;
@@ -164,15 +187,24 @@
 .review-wrapper{
     display: flex;
     flex-direction: column;
+    border-top: 2px solid lightgray;
+    padding: 1rem;
 }
 .review-info{
     display:flex;
     box-sizing: border-box;
-
     align-items:flex-start;
     justify-content: flex-start;
     font-size: 14px;
-    border: 1px solid black;
+}
+.review-button{
+    width:10%;
+        border: 2px solid black;
+        background-color: rgb(101, 101, 101);
+        color: white;
+        padding: 0.5rem;
+        cursor: pointer;
+        filter: drop-shadow(3px 3px 1px black);
 }
 .left-review-info{
     display:flex;
@@ -183,7 +215,85 @@
     font-size: 14px;
     height:auto;
 }
+#left-review-info{
+    display:flex;
+    box-sizing: border-box;
+    width: 10%;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 14px;
+    height:auto;
+    margin-bottom: 1rem;
+}
+#left-review-info i{
+    display:flex;
+margin-right: 1rem;
+}
+.post-review{
+    margin-top: 1rem;
+}
 .numReview{
     margin-right: 1rem;
     margin-left: 1rem;
+}
+#second-star{
+    font-size: 22px;
+    margin-right: 0.5rem;
+    justify-content: baseline;
+}
+.one-review{
+    display: flex;
+    width: fit-content;
+}
+.one-review p{
+    align-items: center;
+    display: flex;
+    justify-content: baseline;
+}
+.inner-info{
+    display: flex;
+    width: 100%;
+    justify-content: baseline;
+}
+.inner-info h2{
+    padding-left: 1rem;
+}
+.hidden{
+    display: none;
+}
+.show{
+    display: inline;
+}
+#spotReview{
+    display: flex;
+    justify-content: space-evenly;
+    width: 10%;
+}
+#left i{
+    padding-right: 3px;
+}
+#left-side{
+    display: flex;
+    justify-content: baseline;
+    align-items: center;
+}
+#left-review{
+    display: flex;
+    justify-content: space-evenly;
+    margin-right: 1rem;
+}
+#right-review{
+    display: flex;
+    justify-content: baseline;
+}
+#right-review p{
+    margin-left: 1rem;
+}
+#right-side{
+    display: flex;
+    justify-content: baseline;
+    align-items: center;
+}
+#right h2{
+    padding-right: 1rem;
 }
