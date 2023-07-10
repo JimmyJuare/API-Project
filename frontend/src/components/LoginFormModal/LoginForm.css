@@ -1,0 +1,28 @@
+.login-wrapper{
+    display: flex;
+    flex-direction: column;
+    border-radius: 21px;
+    padding: 1rem;
+}
+.login-wrapper form{
+    display: flex;
+    flex-direction: column;
+    border-radius: 21px;
+    padding: 1rem;
+}
+.login-wrapper h1 {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .login-wrapper form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    box-sizing: border-box; /* Add box-sizing to include padding and borders within the width */
+  }
+  .login-wrapper button{
+    padding: 1rem;
+    filter: drop-shadow(4px 4px 1px lightgray);
+    cursor: pointer;
+  }

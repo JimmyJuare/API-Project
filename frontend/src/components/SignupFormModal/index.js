@@ -38,7 +38,7 @@ function SignupFormModal() {
           lastName,
           password,
         })
-      ).catch(async (res) => {
+      ).catch(async (res) => {s
         const data = await res.json();
         if (data && data.errors) {
           setErrors(data.errors);

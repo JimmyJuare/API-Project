@@ -86,7 +86,7 @@ function CreateSpot() {
                     <label className='description'>
                         <h2>Create A Spot</h2>
                         <h3>Where's your place located?</h3>
-                        <p>Guests will only get your exact address once they booked areservation.</p>
+                        <p>Guests will only get your exact address once they booked a reservation.</p>
                     </label>
                     <div className='input-field'>
                         <label>country <p className='errors'>{Errors.country}</p></label>

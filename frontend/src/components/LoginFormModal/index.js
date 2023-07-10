@@ -53,6 +53,8 @@ function LoginFormModal() {
 
   return (
     <>
+    <div className="login-wrapper">
+
       <h1>Log In</h1>
       {errors.credential && <p>{errors.credential}</p>}
       {errors.password && <p>{errors.password}</p>}
@@ -83,6 +85,7 @@ function LoginFormModal() {
           Log in as Demo User
         </button>
       </form>
+    </div>
     </>
   );
 }
