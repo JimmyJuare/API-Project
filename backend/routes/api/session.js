@@ -41,16 +41,18 @@ router.post(
         }
       });
 
-      if(credential && !user){
-        res.json({message:'invalid credentials'})
-      }
+      // if(credential && !user){
+      // }
       if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
         const err = new Error('Bad Request');
         err.status = 401;
         err.title = 'Login failed';
         err.errors = {
           credential: "Email or username is required",
-          password: "Password is required"};
+          password: "Password is required",
+          message:'invalid credentials'
+
+        };
         return next(err);
       }
   
