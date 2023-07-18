@@ -38,6 +38,12 @@ function SpotsDetails() {
       dispatch(thunkDeleteSpotReview(reviewId));
       handleDeleteModal(null); // Close the modal after deleting the review
     };
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const year = date.getFullYear();
+        return `${month} ${year}`;
+      };
 
     return (
         <>
@@ -244,7 +250,7 @@ function SpotsDetails() {
                                                 <div key={review.id}>
 
                                                     <h2>{review.User.firstName}</h2>
-                                                    <p>Time: {review.createdAt}</p>
+                                                    <p>Time: {formatDate(review.createdAt)}</p>
                                                     <p> {review.review}</p>
                                                     {review.userId === sessionUser.id && (
                                                         <button onClick={() => handleDeleteReview(review.id)}>Delete</button>

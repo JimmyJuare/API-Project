@@ -20,6 +20,7 @@ function LoginFormModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = {}
     setErrors({});
     try {
       await dispatch(sessionActions.login({ credential, password }));
