@@ -21,21 +21,16 @@ function LoginFormModal() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
-    const errors = {}
     
     
       dispatch(sessionActions.login({ credential, password }))
-      .then(data => {
-        console.log('front end data', data);
-        if(data.errors){
+      .then(closeModal)
+      .catch(
+        async (res) => {
+          const data = await res.json();
           setErrors(data.errors)
         }
-      })
-      .catch(
-        async (res) =>{
-          console.log('this is result', res);
-        }
-      )
+      );
   
       // if (errors.response) {
       //   // Backend returned error messages
@@ -74,7 +69,7 @@ function LoginFormModal() {
     <div className="login-wrapper">
 
       <h1>Log In</h1>
-       {Errors.message && (<p>{Error.message}</p>)}
+       {Errors.message && (<p>{Errors.message}</p>)}
       <form onSubmit={handleSubmit}>
         <label>
           Username or Email
