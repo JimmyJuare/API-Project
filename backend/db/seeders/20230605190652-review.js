@@ -15,19 +15,19 @@ module.exports = {
           spotId: 1,
           userId: 1,
           review: 'best place ever',
-          stars: 5
+          stars: 5.00
         },
         {
           spotId: 2,
           userId: 2,
           review: 'it wasnt bad but it wasnt great',
-          stars: 3
+          stars: 3.00
         },
         {
           spotId: 3,
           userId: 3,
           review: 'it was good',
-          stars: 4
+          stars: 4.00
         }
       ], {validate:true});
     } catch (error) {

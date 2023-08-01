@@ -5,7 +5,7 @@ import { useState } from 'react';
 import './spots.css'
 import { Link } from 'react-router-dom/';
 function LandingPage() {
-    const [shouldRefresh, setShouldRefresh] = useState(false);
+    // const [shouldRefresh, setShouldRefresh] = useState(false);
     const arr =
         [
             'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/depositphotos_57659575-stock-photo-beach-house.jpg',
@@ -18,32 +18,34 @@ function LandingPage() {
         ]
     const dispatch = useDispatch()
     const spots = useSelector((state) => state.spots.spots.Spots);
+    // useEffect(() => {
+    //     if (shouldRefresh) {
+    //       setShouldRefresh(false);
+    //       window.location.reload();
+    //     }
+    //   }, [shouldRefresh]);
 
-    useEffect(() => {
-        if (shouldRefresh) {
-          setShouldRefresh(false);
-          window.location.reload();
-        }
-      }, [shouldRefresh]);
-
-  const handleSpotClick = () => {
-    setShouldRefresh(true);
-  };
-    let spot;
+//   const handleSpotClick = () => {
+//     setShouldRefresh(true);
+//   };
+//     let spot;
     useEffect(() => {
         dispatch(getAllSpots())
+        
     }, [dispatch]);
-    if (!spots) {
-        return <div>Loading...</div>; // Display a loading state until spots are fetched
-    }
+     // Check if the spots array is null or empty
+  if (!spots || spots.length === 0) {
+    return <div>Loading...</div>; // Display a loading state until spots are fetched
+  }
     return (
         <>
+                {console.log("Spots:", spots)}
             <div className='wrapper'>
                 {spots && (
                     <>
                         {spots.map((spot, index) => (
-                            <Link to={`/spots/${spot.id}`} key={spot.id} onClick={handleSpotClick} className='spot-item'>
-
+                            <Link to={`/spots/${spot.id}`} key={spot.id} className='spot-item'>
+                                {console.log(spot.id)}
                                 <img className='image' src={spot.previewImage}
                                     alt="Spot" />
                                 <div className='info'>
@@ -52,7 +54,7 @@ function LandingPage() {
                                         <p>${spot.price} night</p>
                                     </div>
                                     <div className='rating'>
-                                        <i class="fa-sharp fa-solid fa-star"></i>
+                                        <i className="fa-sharp fa-solid fa-star"></i>
                                         {spot.avgRating === 0 ? (
                                             <p>new</p>
                                         ) : (<p>{spot.avgRating}</p>)}

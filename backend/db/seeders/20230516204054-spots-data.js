@@ -136,16 +136,6 @@ module.exports = {
           name: "Duplex",
           description: "Garden backyard",
           price: 350,
-        },
-        {
-          ownerId:2,
-          address: "1029 Vine Street",
-          city: "San Francisco",
-          state: "California",
-          country: "United States of America",
-          name: "Penthouse",
-          description: "Panoramic city views",
-          price: 1000,
         }
       ], {validate:true})
       

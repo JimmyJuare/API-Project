@@ -11,37 +11,37 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [Errors, setErrors] = useState({});
   const { closeModal } = useModal();
-
+  
   useEffect(() => {
     setErrors({});
     setCredential("");
     setPassword("");
   }, [closeModal]);
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
     
     
-      dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
-      .catch(
-        async (res) => {
-          const data = await res.json();
-          setErrors(data.errors)
-        }
+    dispatch(sessionActions.login({ credential, password }))
+    .then(closeModal)
+    .catch(
+      async (res) => {
+        const data = await res.json();
+        setErrors(data.errors)
+      }
       );
-  
+      
       // if (errors.response) {
-      //   // Backend returned error messages
-      //   errors.credential = 'Credential not Valid'
-      //   setErrors(errors);
-      // } else {
-      //   // Other error occurred, handle it as needed
-      // }
-  
-  };
-  
+        //   // Backend returned error messages
+        //   errors.credential = 'Credential not Valid'
+        //   setErrors(errors);
+        // } else {
+          //   // Other error occurred, handle it as needed
+          // }
+          
+        };
+        
   
 
   const handleDemoLogin = () => {
@@ -50,7 +50,7 @@ function LoginFormModal() {
         credential: "Demo-lition", 
         password: "password", 
       })
-    )
+    ).then(closeModal)
   };
 
   const isFormValid = credential.length < 4 || password.length < 6;
@@ -69,7 +69,7 @@ function LoginFormModal() {
     <div className="login-wrapper">
 
       <h1>Log In</h1>
-       {Errors.message && (<p>{Errors.message}</p>)}
+       {Errors.message && (<p className="">{Errors.message}</p>)}
       <form onSubmit={handleSubmit}>
         <label>
           Username or Email

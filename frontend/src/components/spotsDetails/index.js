@@ -44,6 +44,9 @@ function SpotsDetails() {
         const year = date.getFullYear();
         return `${month} ${year}`;
       };
+      if (!spot) {
+        return <div>Loading...</div>; // Display a loading state until spots are fetched
+      }
 
     return (
         <>
@@ -112,7 +115,7 @@ function SpotsDetails() {
                                                 <>
                                                     <div className='rating-info'>
                                                         <div className='inner-info'>
-                                                            <i id='first-star' class="fa-sharp fa-solid fa-star"></i>
+                                                            <i id='first-star' className="fa-sharp fa-solid fa-star"></i>
                                                             <h2>{spot.avgStarRating}</h2>
                                                         </div>
                                                     </div>
@@ -121,7 +124,7 @@ function SpotsDetails() {
                                             <div className='card-reviews'>
                                                 {spot.numReviews === 0 ? (
                                                     <>
-                                                        <i id='first-star' class="fa-sharp fa-solid fa-star"></i>
+                                                        <i id='first-star'  className="fa-sharp fa-solid fa-star"></i>
                                                         <p className='new'><strong>new</strong></p>
                                                     </>
                                                 ) :

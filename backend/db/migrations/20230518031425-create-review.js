@@ -37,13 +37,13 @@ module.exports = {
         }
       },
       stars: {
-        type: Sequelize.INTEGER,
-        allowNull:false,
-        validate:{
-          isInt:true,
-          max:5,
-          min:1
-        }
+        type: Sequelize.DECIMAL(3, 2), 
+        allowNull: false,
+        validate: {
+          isDecimal: true,
+          min: 1,
+          max: 5,
+        },
       },
       createdAt: {
         type:Sequelize.DATE,
