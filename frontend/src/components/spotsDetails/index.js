@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getSpotbyId, getSpotsReviews, thunkDeleteSpot, thunkDeleteSpotReview } from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import { clearSpotData, clearSpotReviews } from '../../store/spots';
+
 import './spotsDetails.css'
 import ReviewModal from '../reviewModal';
 import { useModal } from '../../context/Modal';
@@ -10,17 +12,41 @@ function SpotsDetails() {
     const img = <img src='https://png-files-for-api.s3.us-east-2.amazonaws.com/png/photo-1600596542815-ffad4c1539a9.jpg'></img>
     const dispatch = useDispatch()
     const { spotId } = useParams()
+    const [loadingReviews, setLoadingReviews] = useState(true);
+
     const sessionUser = useSelector(state => state.session.user);
-    const spot = useSelector(state => state.spots.spotsbyId)
+    const spot = useSelector(state => state.spots.spotsbyId || {})
     const spotReview = useSelector(state => state.spots.spotsReview || [])
-    const spotImages = useSelector(state => state.spots.spotsbyId || [])
     const { setModalContent } = useModal();
-    const hasUserIdOne = spotReview.Reviews && spotReview.Reviews.some((obj) => obj.userId === sessionUser.id);
-    let btn
+    let hasUserIdOne = false;
+    if (sessionUser) {
+        const userReview = spotReview.Reviews && spotReview.Reviews.find((obj) => {
+            return obj.userId === sessionUser.id;
+        });
+        hasUserIdOne = !!userReview;
+    }
+    console.log('this is my spot', spot);
+    console.log('this is spot review', spotReview);
+
     useEffect(() => {
+        // Clear spot and reviews state when changing spots
+        setLoadingReviews(true);
         dispatch(getSpotbyId(spotId))
-        dispatch(getSpotsReviews(spotId))
+            .then(() => dispatch(getSpotsReviews(spotId)))
+            .then(() => setLoadingReviews(false))
+            .catch((error) => {
+                console.error('Error Fetching Spot and Reviews:', error);
+                setLoadingReviews(false);
+            });
+
+        // Return a cleanup function to clear spot and reviews when unmounting
+        return () => {
+            dispatch(clearSpotData());
+            dispatch(clearSpotReviews());
+        };
     }, [dispatch, spotId]);
+
+
     const handleAlertClick = () => {
         alert('Feature Coming soon!');
     };
@@ -30,26 +56,28 @@ function SpotsDetails() {
         setModalContent(content); // Set the modal content to be rendered
     };
     const handleDeleteModal = (reviewId) => {
-      const content = <DeleteReviewModal reviewId={reviewId} />;
-      setModalContent(content);
+        const content = <DeleteReviewModal reviewId={reviewId} />;
+        setModalContent(content);
     };
-  
+
     const handleDeleteReview = (reviewId) => {
-      dispatch(thunkDeleteSpotReview(reviewId));
-      handleDeleteModal(null); // Close the modal after deleting the review
+        dispatch(thunkDeleteSpotReview(reviewId));
+        handleDeleteModal(null); // Close the modal after deleting the review
     };
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const month = date.toLocaleString('default', { month: 'long' });
         const year = date.getFullYear();
         return `${month} ${year}`;
-      };
-      if (!spot) {
+    };
+    if (Object.keys(spot).length === 0) {
         return <div>Loading...</div>; // Display a loading state until spots are fetched
-      }
+    }
+
 
     return (
         <>
+            {spotReview.Reviews ? console.log('this is the spots review length', spotReview.Reviews.length) : null}
             <div className='wrapper-spots'>
                 {spot && (
                     <>
@@ -58,7 +86,7 @@ function SpotsDetails() {
                         <div className='pictures'>
                             <div className='left-pic'>
 
-                                {spotImages.SpotImages[0].url ? <img src={spotImages.SpotImages[0].url} /> : img}
+                                {spot.SpotImages[0].url ? <img src={spot.SpotImages[0].url} /> : img}
                             </div>
                             {/* <div className='right-pics'> */}
                             {/* {spotImage && (
@@ -70,7 +98,7 @@ function SpotsDetails() {
                                     </>
                                 )} */}
                             <div className='right-pics'>
-                                {spotImages.SpotImages.slice(1).map((image, i) => {
+                                {spot.SpotImages.slice(1).map((image, i) => {
 
                                     return (
                                         <img src={image.url} />
@@ -116,7 +144,7 @@ function SpotsDetails() {
                                                     <div className='rating-info'>
                                                         <div className='inner-info'>
                                                             <i id='first-star' className="fa-sharp fa-solid fa-star"></i>
-                                                            <h2>{spot.avgStarRating}</h2>
+                                                            <h2>{spot.avgStarRating.toFixed(1)}</h2>
                                                         </div>
                                                     </div>
                                                 </>
@@ -124,7 +152,7 @@ function SpotsDetails() {
                                             <div className='card-reviews'>
                                                 {spot.numReviews === 0 ? (
                                                     <>
-                                                        <i id='first-star'  className="fa-sharp fa-solid fa-star"></i>
+                                                        <i id='first-star' className="fa-sharp fa-solid fa-star"></i>
                                                         <p className='new'><strong>new</strong></p>
                                                     </>
                                                 ) :
@@ -157,85 +185,85 @@ function SpotsDetails() {
                         </div>
                         <br />
                         <div className='review-wrapper'>
-                            {sessionUser && (sessionUser.id !== spot.ownerId) ?
+                            {/* this is the review card */}
+                            {sessionUser && (sessionUser.id !== spot.id) && spot.numReviews === 0 ?
                                 (
                                     <>
-                                        {hasUserIdOne ? (
-                                            <>
-                                                <button className="review-button hidden" onClick={handleReviewModal}>
-                                                    make a review
-                                                </button>
-                                                {spot.numReviews === 1 ? (
-                                                    <>
-                                                        <div id='left-review-info'>
-                                                            <div id='left-review'>
-                                                                <i id='second-star' class="fa-sharp fa-solid fa-star"></i>
-                                                                <h2 className='new'>{spot.avgStarRating}</h2>
-                                                            </div>
-                                                            <div id='right-review'>
-                                                                <h2>{spot.numReviews}</h2>
-                                                                <p>review</p>
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <div id='spotReview'>
-                                                            <div id='left-side'>
-                                                                <i id='second-star' class="fa-sharp fa-solid fa-star"></i>
-                                                                <p className=''>{spot.avgStarRating}</p>
-                                                            </div>
-                                                            <div id='right-side'>
-                                                                <h2>{spot.numReviews}</h2>
-                                                                <p>reviews</p>
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <>
-                                                <div id='left-review-info'>
-                                                    <i id='second-star' class="fa-sharp fa-solid fa-star"></i>
-                                                    <h2 className='new'>New</h2>
-                                                </div>
-                                                <button className="review-button" onClick={handleReviewModal}>
-                                                    make a review
-                                                </button>
+                                        <div id='spotReview'>
+                                            <div id='left-side'>
+                                                <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
+                                            </div>
+                                            <div id='right-side'>
+                                                <h2>New</h2>
+                                            </div>
+                                        </div>
+                                        <button className="review-button" onClick={handleReviewModal}>
+                                            make a review
+                                        </button>
 
-                                                <p className='post-review'>Be the first to post review!</p>
-                                            </>
-                                        )}
+                                        <p className='post-review'>Be the first to post review!</p>
                                     </>
+
+
                                 ) :
                                 (
                                     <>
 
                                         <div className='review-info'>
                                             <div className='reviews'>
-                                                {spot.numReviews === 0 ? (
+                                                {sessionUser && (sessionUser.id !== spot.id) && spot.numReviews >= 1 && !hasUserIdOne ? (
                                                     <>
-                                                        <div className='left-review-info'>
-                                                            <i id='second-star' class="fa-sharp fa-solid fa-star"></i>
-                                                            <h2 className='new'>New</h2>
+                                                        <div id='top-review-div'>
+
+                                                            <div className='left-review-info'>
+                                                                <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
+                                                                <h2 className='new'>{spot.avgStarRating.toFixed(1)}</h2>
+                                                                <div className='dot-wrapper'>
+                                                                    <div className='dot'>.</div>
+                                                                </div>
+                                                                <h2 className='spot-review'>{spot.numReviews}</h2>
+                                                                <p>review</p>
+                                                            </div>
+                                                            <button className="review-button" onClick={handleReviewModal}>
+                                                                make a review
+                                                            </button>
                                                         </div>
+
                                                     </>
                                                 ) :
                                                     <>
                                                         {spot.numReviews === 1 ? (
                                                             <>
                                                                 <div className='left-review-info'>
-                                                                    <i id='second-star' class="fa-sharp fa-solid fa-star"></i>
-                                                                    <h2 className='new'>New</h2>
-                                                                    <h2>{spot.numReviews}</h2>
+                                                                    <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
+                                                                    <h2 className='new'>{spot.avgStarRating.toFixed(1)}</h2>
+                                                                    <div className='dot-wrapper'>
+                                                                        <div className='dot'>.</div>
+                                                                    </div>
+                                                                    <h2 className='spot-review'>{spot.numReviews}</h2>
                                                                     <p>review</p>
                                                                 </div>
                                                             </>
                                                         ) : (
                                                             <>
-
-                                                                <h2>{spot.numReviews}</h2>
-                                                                <p>reviews</p>
+                                                                {!sessionUser && spot.numReviews === 0 ? (
+                                                                    <>
+                                                                        <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
+                                                                        <h2>New</h2>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                         <div className='left-review-info'>
+                                                                    <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
+                                                                    <h2 className='new'>{spot.avgStarRating.toFixed(1)}</h2>
+                                                                    <div className='dot-wrapper'>
+                                                                        <div className='dot'>.</div>
+                                                                    </div>
+                                                                    <h2 className='spot-review'>{spot.numReviews}</h2>
+                                                                    <p>reviews</p>
+                                                                </div>
+                                                                    </>
+                                                                )}
                                                             </>
                                                         )}
                                                     </>
@@ -244,25 +272,31 @@ function SpotsDetails() {
                                         </div>
                                     </>
                                 )}
-                            {spotReview && spotReview.Reviews && (
-                                <div className="review">
-                                    {(!spotReview.Reviews ?
-                                        (<div>Loading...</div>) :
-                                        (<>
-                                            {spotReview && spotReview.Reviews.map((review) => (
-                                                <div key={review.id}>
+                            {/* this is what shows the reviews */}
+                            {loadingReviews ? (
+                                <div>Loading...</div>
+                            ) : (
+                                <>
+                                    {spotReview && spotReview.Reviews && (
+                                        <div className="review">
+                                            <>
+                                                {spotReview && spotReview.Reviews.map((review) => (
+                                                    <div key={review.id}>
 
-                                                    <h2>{review.User.firstName}</h2>
-                                                    <p>Time: {formatDate(review.createdAt)}</p>
-                                                    <p> {review.review}</p>
-                                                    {review.userId === sessionUser.id && (
-                                                        <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </>)
+                                                        <h2>{review.User.firstName}</h2>
+                                                        <p>Time: {formatDate(review.createdAt)}</p>
+                                                        <p> {review.review}</p>
+
+                                                        {sessionUser && review.userId === sessionUser.id && (
+                                                            <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </>
+
+                                        </div>
                                     )}
-                                </div>
+                                </>
                             )}
                         </div>
                     </>

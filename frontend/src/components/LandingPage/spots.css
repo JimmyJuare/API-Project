@@ -47,3 +47,7 @@
     display: flex;
     justify-content: space-between;
 }
+.inner-info{
+  display: flex;
+  flex-direction: column;
+}

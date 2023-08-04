@@ -62,8 +62,7 @@ function ProfileButton({ user }) {
           <>
           <div className="user-info">
 
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
+            <li>Hello, {user.username}</li>
             <li>{user.email}</li>
             <li>
               <div className="manageSpotDiv">
@@ -79,20 +78,25 @@ function ProfileButton({ user }) {
           </div>
           </>
         ) : (
-          <>
+          
+          <div className="login-and-signup">
             <OpenModalMenuItem
-            id='login-cursor'
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
+            className="signup-button"
               itemText="Sign Up"
               id='right-cursor'
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
             />
-          </>
+    
+            <OpenModalMenuItem
+            className="login-button"
+            id='login-cursor'
+              itemText="Log In"
+              onItemClick={closeMenu}
+              modalComponent={<LoginFormModal />}
+            />
+            
+            </div>
         )}
       </ul>
       </div>

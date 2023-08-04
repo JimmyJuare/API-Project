@@ -51,13 +51,13 @@ function LandingPage() {
                                 <div className='info'>
                                     <div className='inner-info'>
                                         <p><strong>{spot.city}, {spot.state}</strong></p>
-                                        <p>${spot.price} night</p>
+                                        <p>${spot.price.toFixed(2)} night</p>
                                     </div>
                                     <div className='rating'>
                                         <i className="fa-sharp fa-solid fa-star"></i>
                                         {spot.avgRating === 0 ? (
                                             <p>new</p>
-                                        ) : (<p>{spot.avgRating}</p>)}
+                                        ) : (<p>{spot.avgRating.toFixed(1)}</p>)}
                                     </div>
                                 </div>
                             </Link>

@@ -48,8 +48,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isDecimal: true,
-          min: 1,
-          max: 5,
+          min: 1.00,
+          max: 5.00,
         },
       },
   }, {

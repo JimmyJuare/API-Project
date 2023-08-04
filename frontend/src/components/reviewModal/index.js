@@ -30,7 +30,7 @@ function ReviewModal(props) {
 
   const handleSubmit = (e) => {
     // ... your code for submitting the review
-
+    e.preventDefault()
     const hasUserIdOne = spotReview.Reviews && spotReview.Reviews.some((obj) => obj.userId === sessionUser.id);
     
     if (hasUserIdOne) {
@@ -40,15 +40,19 @@ function ReviewModal(props) {
     dispatch(thunkSetReviews(spotId, { review, stars }))
     closeModal()
     // Reset hover and stars after submitting the review
-    window.location.reload();
     setHover(0);
     setStars(0);
   };
+  const isFormValid =
+    review.length < 10 ||
+    stars === 0;
 
   return (
-    <>
-      <h1>How was your stay?</h1>
+    
     <div className="reviewModal">
+
+      <h1 className="review-header">How was your stay?</h1>
+    <div className="review-info">
       {Errors.error && <p className="review-error">{Errors.error}</p>}
       <form onSubmit={handleSubmit}>
         <textarea
@@ -56,6 +60,8 @@ function ReviewModal(props) {
           cols={40}
           rows={40}
           onChange={(e) => setReview(e.target.value)}
+          placeholder="Leave your Review Here..."
+          
         ></textarea>
         <div className="rating-input">
           {[1, 2, 3, 4, 5].map((num) => (
@@ -69,11 +75,12 @@ function ReviewModal(props) {
               <i className="fa-sharp fa-solid fa-star"></i>
             </div>
           ))}
+          <label>Stars</label>
         </div>
-        <button type="submit">Submit your review</button>
+        <button onSubmit={handleSubmit} type="submit" disabled={isFormValid}>Submit your review</button>
       </form>
     </div>
-    </>
+    </div>
   );
 }
 
