@@ -65,8 +65,10 @@ function ProfileButton({ user }) {
             <li>Hello, {user.username}</li>
             <li>{user.email}</li>
             <li>
+              <div className="spotDiv">
               <div className="manageSpotDiv">
               <button className="manageSpot" onClick={manageSpots}>Manage Spots</button>
+              </div>
               </div>
             </li>
             <li>

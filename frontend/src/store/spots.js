@@ -172,7 +172,6 @@ export const thunkSetSpotImages = (url, spotId, preview = false) => async (dispa
 }
 export const getSpotbyId = (spotId) => async (dispatch) => {
   try {
-    console.log('this is my spotID', spotId);
     const response = await csrfFetch(`/api/spots/${spotId}`);
     if (response.ok) {
       const spot = await response.json()
@@ -248,8 +247,14 @@ export const thunkDeleteSpotReview = (reviewId) => async (dispatch) => {
     console.error('Error occurred:', error);
   }
 }
+const calculateAverageRating = (reviews) => {
+  if (reviews.length === 0) return 0;
 
-const initialState = { spots: {}, spotsReview: [] };
+  const totalRating = reviews.reduce((sum, review) => sum + review.stars, 0);
+  return totalRating / reviews.length;
+};
+
+const initialState = { spots: {}, spotsReview: [],  avgStarRating: 0};
 
 const spotsReducer = (state = initialState, action) => {
   let newState;
@@ -284,9 +289,15 @@ const spotsReducer = (state = initialState, action) => {
       newState.spotsReview = action.payload
       return newState
     case DELETE_SPOT:
-      newState = Object.assign({}, state)
-      newState.spots = null
-      return newState
+      newState = { ...state };
+      newState.spotsReview = newState.spotsReview.filter(
+        (review) => review.id !== action.payload
+      );
+
+      // Calculate the average spot rating after deleting the review
+      newState.avgStarRating = calculateAverageRating(newState.spotsReview);
+
+      return newState;
     case DELETE_SPOT_REVIEW:
       newState = { ...state };
       newState.spotsReview = newState.spotsReview.filter(

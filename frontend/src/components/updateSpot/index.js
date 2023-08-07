@@ -82,7 +82,7 @@ function UpdateSpot() {
             <form onSubmit={handleSubmit}>
                 <div className='upper-form'>
                     <label className='description'>
-                        <h2>Create A Spot</h2>
+                        <h2>Update a Spot</h2>
                         <h3>Where's your place located?</h3>
                         <p>Guests will only get your exact address once they booked areservation.</p>
                     </label>
@@ -188,7 +188,7 @@ function UpdateSpot() {
 
                         <button className='create-spot'
                             type='submit'>
-                            Create Spot
+                            Update a Spot
                         </button>
                     </div>
                 </div>

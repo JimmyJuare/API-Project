@@ -1,17 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+
 import { useDispatch } from "react-redux";
+
 import { useModal } from "../../context/Modal";
-import { thunkDeleteSpotReview } from "../../store/spots";
+import { thunkDeleteSpotReview, getSpotbyId, getSpotsReviews, clearSpotData, clearSpotReviews } from '../../store/spots';
+
 import "./DeleteReviewModal.css";
 
 function DeleteReviewModal(props) {
-  const { reviewId } = props;
+  const { reviewId, spotId } = props;
   const dispatch = useDispatch();
   const { closeModal } = useModal();
-
   const handleDelete = () => {
+    //this deletes the spot review
     dispatch(thunkDeleteSpotReview(reviewId));
-    closeModal(); // Close the modal after deleting the review
+    closeModal();
+    console.log('this is the spotId in deleteReview',spotId);
+    dispatch(getSpotbyId(spotId))
+    .then(() => dispatch(getSpotsReviews(spotId)))
+        .catch((error) => {
+            console.error('Error Fetching Spot and Reviews:', error);
+          });
+        return(()=>{
+          dispatch(clearSpotData());
+          dispatch(clearSpotReviews());
+          
+        }) // Close the modal after deleting the review
   };
 
   const handleCancel = () => {

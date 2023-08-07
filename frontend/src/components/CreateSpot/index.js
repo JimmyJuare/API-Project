@@ -13,15 +13,11 @@ function CreateSpot() {
     const [name, newName] = useState('')
     const [price, newPrice] = useState(0)
     const [prevImg, newPrevImg] = useState('')
-    const [Errors, setErrors] = useState('')
-    const [url1, newUrl1] = useState('')
-    const [url2, newUrl2] = useState('')
-    const [url3, newUrl3] = useState('')
-    const [url4, newUrl4] = useState('')
-    const [urls, setUrls] = useState(['','','','',''])
+    const [Errors, setErrors] = useState({})
+    const [urls, setUrls] = useState(['', '', '', '', ''])
     const history = useHistory()
     const dispatch = useDispatch()
-    const  handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         const errors = {}
         if (!country.length) {
@@ -33,9 +29,7 @@ function CreateSpot() {
         if (!description.length) errors.text = 'Description needs a minimum of 30 characters'
         if (!name.length) errors.name = 'Name is required'
         if (!price.length) errors.price = 'Price is required'
-        if (!urls[0].length) errors.prevImg = 'Preview Image is required'
-        if (!urls[1].length) errors.url1 = 'Image URL must end in .png, .jpg, or .jpeg'
-        console.log(errors);
+        if (!urls[0].length) errors.prevImg = 'The first image URL is required';
         if (Object.keys(errors).length === 0) {
             // If no errors, proceed with form submission
             const spotData = {
@@ -47,11 +41,7 @@ function CreateSpot() {
                 description,
                 price,
             };
-      
-            const url = {
-                url1
-            };
-            
+
             const newSpot = await dispatch(thunkSetSpot(spotData));
             console.log(newSpot);
             if (newSpot && newSpot.id) {
@@ -64,19 +54,19 @@ function CreateSpot() {
                     const url = urls[i];
                     if (i === 0) {
                         await dispatch(thunkSetSpotImages(url, newSpotId, true))
-                    } else{
-                        await dispatch(thunkSetSpotImages(url, newSpotId)) 
+                    } else {
+                        await dispatch(thunkSetSpotImages(url, newSpotId))
                     }
+                }
+
+                // Redirect to the new spot's page
+                history.push(`/spots/${newSpotId}`);
             }
-            
-              // Redirect to the new spot's page
-              history.push(`/spots/${newSpotId}`);
-            }
-          } else {
+        } else {
             // If there are errors, update the errors state
             setErrors(errors);
-          }
-      
+        }
+
     }
 
     return (
@@ -99,20 +89,20 @@ function CreateSpot() {
                         <input type='text' placeholder='Address'
                             value={address} onChange={e => setAddress(e.target.value)}></input>
                     </div>
-            
+
                     <div className='bottom-upper-form'>
                         <div id='left' className='input-field'>
                             <label>City <p className='errors'>{Errors.city}</p></label>
                             <input type='text' placeholder='City'
                                 value={city} onChange={e => setCity(e.target.value)}></input>
                         </div>
-                        
+
                         <div id='right' className='input-field'>
                             <label>State <p className='errors'>{Errors.state}</p></label>
                             <input type='text' placeholder='STATE'
                                 value={state} onChange={e => setState(e.target.value)}></input>
                         </div>
-                        
+
                     </div>
                     <div className='middle-upper-form'>
                         <label className='description'>
@@ -128,10 +118,10 @@ function CreateSpot() {
                             cols={40}
                             rows={10}
                             placeholder='Please write at least 30 characters'
-                            >
+                        >
 
                         </textarea>
-                        <p className='errors'>{Errors.description}</p>
+                        <p className='errors'>{Errors.text}</p>
                     </div>
                     <div className='middle-upper-form'>
                         <label className='description'>
@@ -147,7 +137,7 @@ function CreateSpot() {
                         >
 
                         </input>
-                            <p className='errors'>{Errors.name}</p>
+                        <p className='errors'>{Errors.name}</p>
                     </div>
                     <div className='middle-upper-form'>
                         <label className='description'>
@@ -157,13 +147,13 @@ function CreateSpot() {
                         </label>
                         <div className='money'>
                             <p><strong>$</strong></p>
-                        <input
-                            value={price}
-                            onChange={e => newPrice(e.target.value)}
-                            placeholder='Price per night (USD)'
-                        >
+                            <input
+                                value={price}
+                                onChange={e => newPrice(e.target.value)}
+                                placeholder='Price per night (USD)'
+                            >
 
-                        </input>
+                            </input>
                         </div>
                         <p className='errors'>{Errors.price}</p>
                     </div>
@@ -179,11 +169,15 @@ function CreateSpot() {
                         <input value={url2} onChange={e => newUrl2(e.target.value)} placeholder='Image URL'></input>
                         <input value={url3} onChange={e => newUrl3(e.target.value)} placeholder='Image URL'></input>
                         <input value={url4} onChange={e => newUrl4(e.target.value)} placeholder='Image URL'></input> */}
-                        {urls.map((url, i) => (<input value={url} key={i} placeholder={i === 0 ? 'Preview Image URL' : 'Image URL'} onChange={(e) => {
-                            const newUrls = [...urls]
-                            newUrls[i] = e.target.value
-                            setUrls(newUrls)
-                        }}/>))}
+                        {urls.map((url, i) => (<input value={url} key={i}
+                            placeholder={i === 0 ? 'Preview Image URL' : 'Image URL'}
+                            onChange={(e) => {
+                                const newUrls = [...urls]
+                                newUrls[i] = e.target.value
+                                setUrls(newUrls)
+                            }} />))}
+                        <p className='errors'>{Errors.prevImg}</p>
+
                     </div>
 
                     <div className='button'>

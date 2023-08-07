@@ -13,7 +13,7 @@ function SpotsDetails() {
     const dispatch = useDispatch()
     const { spotId } = useParams()
     const [loadingReviews, setLoadingReviews] = useState(true);
-
+    const [currentSpotId, setCurrentSpotId] = useState(null);
     const sessionUser = useSelector(state => state.session.user);
     const spot = useSelector(state => state.spots.spotsbyId || {})
     const spotReview = useSelector(state => state.spots.spotsReview || [])
@@ -25,8 +25,6 @@ function SpotsDetails() {
         });
         hasUserIdOne = !!userReview;
     }
-    console.log('this is my spot', spot);
-    console.log('this is spot review', spotReview);
 
     useEffect(() => {
         // Clear spot and reviews state when changing spots
@@ -55,14 +53,23 @@ function SpotsDetails() {
 
         setModalContent(content); // Set the modal content to be rendered
     };
-    const handleDeleteModal = (reviewId) => {
-        const content = <DeleteReviewModal reviewId={reviewId} />;
+    const handleDeleteModal = (reviewId, spotId) => {
+        setCurrentSpotId(spotId);
+        const content = <DeleteReviewModal reviewId={reviewId} spotId={spotId} />;
         setModalContent(content);
     };
 
-    const handleDeleteReview = (reviewId) => {
-        dispatch(thunkDeleteSpotReview(reviewId));
-        handleDeleteModal(null); // Close the modal after deleting the review
+    const handleDeleteReview = (reviewId, spotId) => {
+        handleDeleteModal(reviewId, spotId)
+        dispatch(thunkDeleteSpotReview(reviewId))
+        
+      
+            .then(() => dispatch(getSpotbyId(spotId)))
+            .then(() => dispatch(getSpotsReviews(spotId)))
+            .catch((error) => {
+                console.error('Error Fetching Spot and Reviews:', error);
+            });
+        setModalContent(null);  // Close the modal after deleting the review
     };
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -133,7 +140,7 @@ function SpotsDetails() {
                                     <div className='top-info'>
 
                                         <div className='card-left'>
-                                            <h2>${spot.price}</h2>
+                                            <h2>${spot.price.toFixed(2)}</h2>
                                             <p>night</p>
                                         </div>
                                         <div className='card-right'>
@@ -253,15 +260,15 @@ function SpotsDetails() {
                                                                     </>
                                                                 ) : (
                                                                     <>
-                                                                         <div className='left-review-info'>
-                                                                    <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
-                                                                    <h2 className='new'>{spot.avgStarRating.toFixed(1)}</h2>
-                                                                    <div className='dot-wrapper'>
-                                                                        <div className='dot'>.</div>
-                                                                    </div>
-                                                                    <h2 className='spot-review'>{spot.numReviews}</h2>
-                                                                    <p>reviews</p>
-                                                                </div>
+                                                                        <div className='left-review-info'>
+                                                                            <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
+                                                                            <h2 className='new'>{spot.avgStarRating.toFixed(1)}</h2>
+                                                                            <div className='dot-wrapper'>
+                                                                                <div className='dot'>.</div>
+                                                                            </div>
+                                                                            <h2 className='spot-review'>{spot.numReviews}</h2>
+                                                                            <p>reviews</p>
+                                                                        </div>
                                                                     </>
                                                                 )}
                                                             </>
@@ -288,7 +295,7 @@ function SpotsDetails() {
                                                         <p> {review.review}</p>
 
                                                         {sessionUser && review.userId === sessionUser.id && (
-                                                            <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
+                                                            <button onClick={() => handleDeleteReview(review.id, spotId)}>Delete</button>
                                                         )}
                                                     </div>
                                                 ))}

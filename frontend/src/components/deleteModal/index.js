@@ -11,7 +11,6 @@ function DeleteModal(props) {
 
   const handleDelete = () => {
     dispatch(thunkDeleteSpot(spotId));
-    window.location.reload();
     closeModal(); // Close the modal after deleting the spot
   };
 
