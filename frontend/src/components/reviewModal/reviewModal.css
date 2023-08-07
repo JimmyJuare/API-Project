@@ -1,15 +1,34 @@
+.review-info{
+    display: flex;
+    flex-direction: row;
+    width: 500px;
+    height: fit-content;
+    flex-wrap: wrap;
+    padding: 1rem;
+}
 .reviewModal{
     display: flex;
     flex-direction: row;
     width: 500px;
     height: fit-content;
     flex-wrap: wrap;
+    padding: 1rem;
+    border-radius: 40px;
+    justify-content: center;
+}
+.review-header{
+    text-align: center;
+    padding-top: 1rem;
 }
 .reviewModal form{
     display: flex;
     flex-direction: column;
     width: 500px;
     height: 200px;
+}
+.reviewModal textarea{
+    resize: none;
+    outline: none;
 }
 .rating-input .filled {
     color: black;

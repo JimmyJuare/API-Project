@@ -9,26 +9,39 @@ function LoginFormModal() {
   const sessionUser = useSelector((state) => state.session.user);
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [Errors, setErrors] = useState({});
   const { closeModal } = useModal();
-
+  
   useEffect(() => {
     setErrors({});
     setCredential("");
     setPassword("");
   }, [closeModal]);
-
-  const handleSubmit = async (e) => {
+  
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
-    try {
-      await dispatch(sessionActions.login({ credential, password }));
-    } catch (error) {
-      if (error.errors) {
-        setErrors(error.errors);
+    
+    
+    dispatch(sessionActions.login({ credential, password }))
+    .then(closeModal)
+    .catch(
+      async (res) => {
+        const data = await res.json();
+        setErrors(data.errors)
       }
-    }
-  };
+      );
+      
+      // if (errors.response) {
+        //   // Backend returned error messages
+        //   errors.credential = 'Credential not Valid'
+        //   setErrors(errors);
+        // } else {
+          //   // Other error occurred, handle it as needed
+          // }
+          
+        };
+        
   
 
   const handleDemoLogin = () => {
@@ -37,14 +50,14 @@ function LoginFormModal() {
         credential: "Demo-lition", 
         password: "password", 
       })
-    )
+    ).then(closeModal)
   };
 
   const isFormValid = credential.length < 4 || password.length < 6;
 
-  useEffect(() => {
-    setErrors({});
-  }, [credential, password]);
+  // useEffect(() => {
+  //   setErrors({});
+  // }, [credential, password]);
 
   if (sessionUser) {
     // Hide login and signup buttons
@@ -56,8 +69,7 @@ function LoginFormModal() {
     <div className="login-wrapper">
 
       <h1>Log In</h1>
-      {errors.credential && <p>{errors.credential}</p>}
-      {errors.password && <p>{errors.password}</p>}
+       {Errors.message && (<p className="">{Errors.message}</p>)}
       <form onSubmit={handleSubmit}>
         <label>
           Username or Email
@@ -77,7 +89,6 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && <p>{errors.credential}</p>}
         <button type="submit" disabled={isFormValid}>
           Log In
         </button>

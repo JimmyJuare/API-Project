@@ -1,4 +1,5 @@
 'use strict';
+const Datatype = require('faker/lib/datatype');
 const {
   Model
 } = require('sequelize');
@@ -43,14 +44,14 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     stars: {
-      type:DataTypes.INTEGER,
-      allowNull:false,
-      validate:{
-        isInt:true,
-        max:5,
-        min:1
-      }
-    }
+        type: DataTypes.DECIMAL(3, 2), 
+        allowNull: false,
+        validate: {
+          isDecimal: true,
+          min: 1.00,
+          max: 5.00,
+        },
+      },
   }, {
     sequelize,
     modelName: 'Review',

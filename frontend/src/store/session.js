@@ -53,6 +53,7 @@ export const login = (user) => async (dispatch) => {
     }),
   });
   const data = await response.json();
+  console.log('this is the thunk data', data);
   dispatch(setUser(data.user));
   return response;
 };

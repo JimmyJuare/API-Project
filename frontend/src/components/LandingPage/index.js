@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { getAllSpots, getSpotbyId } from '../../store/spots'
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import ToolTip from './ToolTip';
 import { useState } from 'react';
 import './spots.css'
 import { Link } from 'react-router-dom/';
 function LandingPage() {
-    const [shouldRefresh, setShouldRefresh] = useState(false);
+    // const [shouldRefresh, setShouldRefresh] = useState(false);
     const arr =
         [
             'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/depositphotos_57659575-stock-photo-beach-house.jpg',
@@ -17,49 +18,54 @@ function LandingPage() {
             'https://png-files-for-api.s3.us-east-2.amazonaws.com/png/Screen-Shot-2017-02-16-at-4.08.29-PM.png'
         ]
     const dispatch = useDispatch()
-    const spots = useSelector((state) => state.spots.spots.Spots);
+    const spots = useSelector((state) => state.spots.spots?.Spots);
+    // useEffect(() => {
+    //     if (shouldRefresh) {
+    //       setShouldRefresh(false);
+    //       window.location.reload();
+    //     }
+    //   }, [shouldRefresh]);
 
-    useEffect(() => {
-        if (shouldRefresh) {
-          setShouldRefresh(false);
-          window.location.reload();
-        }
-      }, [shouldRefresh]);
-
-  const handleSpotClick = () => {
-    setShouldRefresh(true);
-  };
-    let spot;
+    //   const handleSpotClick = () => {
+    //     setShouldRefresh(true);
+    //   };
+    //     let spot;
     useEffect(() => {
         dispatch(getAllSpots())
+
     }, [dispatch]);
-    if (!spots) {
+    // Check if the spots array is null or empty
+    if (!spots || spots.length === 0) {
         return <div>Loading...</div>; // Display a loading state until spots are fetched
     }
     return (
         <>
+            {console.log("Spots:", spots)}
             <div className='wrapper'>
                 {spots && (
                     <>
                         {spots.map((spot, index) => (
-                            <Link to={`/spots/${spot.id}`} key={spot.id} onClick={handleSpotClick} className='spot-item'>
-
+                            <Link to={`/spots/${spot.id}`} key={spot.id} className='spot-item'>
+                                {console.log(spot.id)}
                                 <img className='image' src={spot.previewImage}
                                     alt="Spot" />
                                 <div className='info'>
                                     <div className='inner-info'>
                                         <p><strong>{spot.city}, {spot.state}</strong></p>
-                                        <p>${spot.price} night</p>
+                                        <p>${spot.price.toFixed(2)} night</p>
                                     </div>
                                     <div className='rating'>
-                                        <i class="fa-sharp fa-solid fa-star"></i>
+                                        <i className="fa-sharp fa-solid fa-star"></i>
                                         {spot.avgRating === 0 ? (
                                             <p>new</p>
-                                        ) : (<p>{spot.avgRating}</p>)}
+                                        ) : (<p>{spot.avgRating.toFixed(1)}</p>)}
                                     </div>
                                 </div>
                             </Link>
                         ))}
+                        {spots && spots.map((spot) => (
+                            <ToolTip  text={spot.name} />
+      ))}
                     </>
                 )}
             </div>

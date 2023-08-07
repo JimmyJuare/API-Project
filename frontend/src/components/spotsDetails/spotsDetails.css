@@ -139,7 +139,6 @@
     justify-content: start;
     align-items: flex-start;
     text-align:start;
-    width: 10%;
 }
 .card-reviews{
     width: 100%;
@@ -155,7 +154,7 @@
 .review{
     display:flex;
     box-sizing: border-box;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: baseline;
     justify-content: space-evenly;
     font-size: 14px;
@@ -198,7 +197,6 @@
     font-size: 14px;
 }
 .review-button{
-    width:10%;
         border: 2px solid black;
         background-color: rgb(101, 101, 101);
         color: white;
@@ -211,26 +209,41 @@
     box-sizing: border-box;
     flex-basis: 10%;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: baseline;
     font-size: 14px;
     height:auto;
+    justify-content: center;
 }
-#left-review-info{
-    display:flex;
-    box-sizing: border-box;
-    width: 10%;
+.left-review-info {
+    display: flex;
+    flex-basis: 10%;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: baseline;
     font-size: 14px;
-    height:auto;
-    margin-bottom: 1rem;
-}
+    height: auto;
+    justify-content: center;
+    position: relative; /* Add relative positioning to the parent container */
+  }
+  
+  .dot {
+    font-size: 50px;
+    position: absolute; 
+    top: 25%;
+    left: 50%;
+    transform: translate(-20%, -50%);
+  }
+  
 #left-review-info i{
     display:flex;
 margin-right: 1rem;
 }
+#left-review-info .dot{
+    display:flex;
+    color: green;
+}
 .post-review{
     margin-top: 1rem;
+    margin-left: 10px;
 }
 .numReview{
     margin-right: 1rem;
@@ -238,7 +251,7 @@ margin-right: 1rem;
 }
 #second-star{
     font-size: 22px;
-    margin-right: 0.5rem;
+    margin-right: 0.1rem;
     justify-content: baseline;
 }
 .one-review{
@@ -266,8 +279,12 @@ margin-right: 1rem;
 }
 #spotReview{
     display: flex;
-    justify-content: space-evenly;
-    width: 10%;
+    flex-direction: row;
+    justify-content: flex-start;
+    border: 1px solid yellow;
+}
+#review-button{
+    border: 1px solid green;
 }
 #left i{
     padding-right: 3px;
@@ -297,3 +314,19 @@ margin-right: 1rem;
 #right h2{
     padding-right: 1rem;
 }
+.new{
+    margin-right: 0.5rem;
+}
+.spot-review{
+    margin-left: 1rem;
+    margin-right: 0.5rem;
+}
+
+  
+  .dot-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px; /* Set the height to match the font size */
+    position: relative; /* Add relative positioning to the wrapper */
+  }

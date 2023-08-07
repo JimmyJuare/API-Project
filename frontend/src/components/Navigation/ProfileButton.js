@@ -62,30 +62,43 @@ function ProfileButton({ user }) {
           <>
           <div className="user-info">
 
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
+            <li>Hello, {user.username}</li>
             <li>{user.email}</li>
             <li>
-              <button onClick={logout}>Log Out</button>
-              <button onClick={manageSpots}>Manage Spots</button>
+              <div className="spotDiv">
+              <div className="manageSpotDiv">
+              <button className="manageSpot" onClick={manageSpots}>Manage Spots</button>
+              </div>
+              </div>
+            </li>
+            <li>
+              <div className="logOutDiv">
+                
+              <button className="logOut" onClick={logout}>Log Out</button>
+              </div>
             </li>
           </div>
           </>
         ) : (
-          <>
+          
+          <div className="login-and-signup">
             <OpenModalMenuItem
-            id='login-cursor'
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
+            className="signup-button"
               itemText="Sign Up"
               id='right-cursor'
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
             />
-          </>
+    
+            <OpenModalMenuItem
+            className="login-button"
+            id='login-cursor'
+              itemText="Log In"
+              onItemClick={closeMenu}
+              modalComponent={<LoginFormModal />}
+            />
+            
+            </div>
         )}
       </ul>
       </div>
