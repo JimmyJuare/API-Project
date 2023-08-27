@@ -36,7 +36,7 @@ function LandingPage() {
 
     }, [dispatch]);
     // Check if the spots array is null or empty
-    if (!spots || spots.length === 0 ) {
+    if (!spots || spots.length === 0) {
         return <div>Loading...</div>; // Display a loading state until spots are fetched
     }
     return (
@@ -48,7 +48,6 @@ function LandingPage() {
                         {spots.map((spot, index) => (
                             <Link to={`/spots/${spot.id}`} key={spot.id} className='spot-item'>
                                 <Tooltip title={spot.name} arrow>
-                                    {console.log(spot.id)}
                                     <div class="hover-text">
                                     </div>
                                     <img className='image' src={spot.previewImage}
@@ -56,23 +55,15 @@ function LandingPage() {
                                     <div className='info'>
                                         <div className='inner-info'>
                                             <p><strong>{spot.city}, {spot.state}</strong></p>
-                                            {spot.price ? (
-                                                <p>${spot.price.toFixed(2)} night</p>
-                                            ):
-                                            (<div>
-                                                loading...
-                                                </div>)
-                                            
-                                            }
-                                            
-
+                                            {console.log("Type of spot.price:", typeof spot.price)}
+                                            {console.log('price', spot.price)}
+                                            <p>${spot.price.toFixed(2)} night</p>
                                         </div>
                                         <div className='rating'>
                                             <i className="fa-sharp fa-solid fa-star"></i>
                                             {spot.avgRating === 0 ? (
                                                 <p>new</p>
                                             ) : (<p>{spot.avgRating.toFixed(1)}</p>)}
-                                            
                                         </div>
                                     </div>
                                 </Tooltip>

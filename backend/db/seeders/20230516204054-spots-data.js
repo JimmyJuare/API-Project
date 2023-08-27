@@ -55,7 +55,7 @@ module.exports = {
           country: "United States of America",
           name: "House",
           description: "Great WiFi",
-          price: 123,
+          price: 123.00,
         },
         {
           ownerId:3,
@@ -65,7 +65,7 @@ module.exports = {
           country: "United States of America",
           name: "Apartment",
           description: "Spacious living room",
-          price: 250,
+          price: 250.00,
         },
         {
           ownerId:2,
@@ -75,7 +75,7 @@ module.exports = {
           country: "United States of America",
           name: "Condo",
           description: "Beautiful view of the city",
-          price: 400,
+          price: 400.00,
         },
         {
           ownerId:1,
@@ -85,7 +85,7 @@ module.exports = {
           country: "United States of America",
           name: "Townhouse",
           description: "Modern kitchen",
-          price: 800,
+          price: 800.00,
         },
         {
           ownerId:1,
@@ -95,7 +95,7 @@ module.exports = {
           country: "United States of America",
           name: "Beach House",
           description: "Private pool",
-          price: 600,
+          price: 600.00,
         },
         {
           ownerId:3,
@@ -105,7 +105,7 @@ module.exports = {
           country: "United States of America",
           name: "Studio Apartment",
           description: "Close to downtown",
-          price: 200,
+          price: 200.00,
         },
         {
           ownerId:2,
@@ -115,7 +115,7 @@ module.exports = {
           country: "United States of America",
           name: "Cabin",
           description: "Surrounded by nature",
-          price: 300,
+          price: 300.00,
         },
         {
           ownerId:2,
@@ -125,7 +125,7 @@ module.exports = {
           country: "United States of America",
           name: "Lake House",
           description: "Boat dock included",
-          price: 700,
+          price: 700.00,
         },
         {
           ownerId:1,
@@ -135,7 +135,7 @@ module.exports = {
           country: "United States of America",
           name: "Duplex",
           description: "Garden backyard",
-          price: 350,
+          price: 350.00,
         }
       ], {validate:true})
       
