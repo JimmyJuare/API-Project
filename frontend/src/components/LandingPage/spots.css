@@ -52,11 +52,8 @@
   flex-direction: column;
 }
 /* spots.css */
-.tooltip-container {
-  position: relative;
-}
 
-.tooltip {
+.tooltip-text {
   position: absolute;
   top: 100%;
   left: 50%;
@@ -71,7 +68,8 @@
   transition: opacity 0.2s, visibility 0.2s;
 }
 
-.tooltip-container:hover .tooltip {
+.tooltip-container:hover .tooltip-text{
   visibility: visible;
+  z-index: 1;
   opacity: 1;
 }

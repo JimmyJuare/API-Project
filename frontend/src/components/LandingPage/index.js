@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { getAllSpots, getSpotbyId } from '../../store/spots'
 import { useDispatch, useSelector } from 'react-redux';
-import ToolTip from './ToolTip';
+import { Tooltip } from 'react-tippy';
+import 'react-tippy/dist/tippy.css';
 import { useState } from 'react';
 import './spots.css'
 import { Link } from 'react-router-dom/';
@@ -46,26 +47,28 @@ function LandingPage() {
                     <>
                         {spots.map((spot, index) => (
                             <Link to={`/spots/${spot.id}`} key={spot.id} className='spot-item'>
-                                {console.log(spot.id)}
-                                <img className='image' src={spot.previewImage}
-                                    alt="Spot" />
-                                <div className='info'>
-                                    <div className='inner-info'>
-                                        <p><strong>{spot.city}, {spot.state}</strong></p>
-                                        <p>${spot.price.toFixed(2)} night</p>
+                                <Tooltip title={spot.name} arrow>
+                                    {console.log(spot.id)}
+                                    <div class="hover-text">
                                     </div>
-                                    <div className='rating'>
-                                        <i className="fa-sharp fa-solid fa-star"></i>
-                                        {spot.avgRating === 0 ? (
-                                            <p>new</p>
-                                        ) : (<p>{spot.avgRating.toFixed(1)}</p>)}
+                                    <img className='image' src={spot.previewImage}
+                                        alt="Spot" />
+                                    <div className='info'>
+                                        <div className='inner-info'>
+                                            <p><strong>{spot.city}, {spot.state}</strong></p>
+                                            <p>${spot.price.toFixed(2)} night</p>
+                                        </div>
+                                        <div className='rating'>
+                                            <i className="fa-sharp fa-solid fa-star"></i>
+                                            {spot.avgRating === 0 ? (
+                                                <p>new</p>
+                                            ) : (<p>{spot.avgRating.toFixed(1)}</p>)}
+                                        </div>
                                     </div>
-                                </div>
+                                </Tooltip>
                             </Link>
                         ))}
-                        {spots && spots.map((spot) => (
-                            <ToolTip  text={spot.name} />
-      ))}
+
                     </>
                 )}
             </div>
