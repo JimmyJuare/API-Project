@@ -36,7 +36,7 @@ function LandingPage() {
 
     }, [dispatch]);
     // Check if the spots array is null or empty
-    if (!spots || spots.length === 0) {
+    if (!spots || spots.length === 0 ) {
         return <div>Loading...</div>; // Display a loading state until spots are fetched
     }
     return (
@@ -56,7 +56,15 @@ function LandingPage() {
                                     <div className='info'>
                                         <div className='inner-info'>
                                             <p><strong>{spot.city}, {spot.state}</strong></p>
-                                            <p>${typeof spot.price === 'number' ? spot.price.toFixed(2) : '-'}</p>
+                                            {spot.price ? (
+                                                <p>${spot.price.toFixed(2)} night</p>
+                                            ):
+                                            (<div>
+                                                loading...
+                                                </div>)
+                                            
+                                            }
+                                            
 
                                         </div>
                                         <div className='rating'>
