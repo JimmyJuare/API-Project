@@ -1,5 +1,4 @@
 'use strict';
-const Datatype = require('faker/lib/datatype');
 const {
   Model
 } = require('sequelize');
