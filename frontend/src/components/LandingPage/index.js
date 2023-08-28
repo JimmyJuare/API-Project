@@ -20,6 +20,8 @@ function LandingPage() {
         ]
     const dispatch = useDispatch()
     const spots = useSelector((state) => state.spots.spots?.Spots);
+    const isLoading = useSelector((state) => state.spots.isLoading); // Add this line
+
     // useEffect(() => {
     //     if (shouldRefresh) {
     //       setShouldRefresh(false);
@@ -36,9 +38,9 @@ function LandingPage() {
 
     }, [dispatch]);
     // Check if the spots array is null or empty
-    if (!spots || spots.length === 0) {
-        return <div>Loading...</div>; // Display a loading state until spots are fetched
-    }
+    if (isLoading) {
+        return <div>Loading...</div>;
+      }
     return (
         <>
             {console.log("Spots:", spots)}
