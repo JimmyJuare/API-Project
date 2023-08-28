@@ -64,7 +64,7 @@ function LandingPage() {
                                             <i className="fa-sharp fa-solid fa-star"></i>
                                             {spot.avgRating === 0 ? (
                                                 <p>new</p>
-                                            ) : (<p>{spot.avgRating.toFixed(1)}</p>)}
+                                            ) : (<p>{parseFloat(spot.avgRating).toFixed(1)}</p>)}
                                         </div>
                                     </div>
                                 </Tooltip>

@@ -151,7 +151,7 @@ function SpotsDetails() {
                                                     <div className='rating-info'>
                                                         <div className='inner-info'>
                                                             <i id='first-star' className="fa-sharp fa-solid fa-star"></i>
-                                                            <h2>{spot.avgStarRating.toFixed(1)}</h2>
+                                                            <h2>{parseFloat(spot.avgStarRating).toFixed(1)}</h2>
                                                         </div>
                                                     </div>
                                                 </>
