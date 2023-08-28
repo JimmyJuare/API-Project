@@ -20,8 +20,6 @@ function LandingPage() {
         ]
     const dispatch = useDispatch()
     const spots = useSelector((state) => state.spots.spots?.Spots);
-    const isLoading = useSelector((state) => state.spots.isLoading); // Add this line
-
     // useEffect(() => {
     //     if (shouldRefresh) {
     //       setShouldRefresh(false);
@@ -38,9 +36,9 @@ function LandingPage() {
 
     }, [dispatch]);
     // Check if the spots array is null or empty
-    if (isLoading) {
-        return <div>Loading...</div>;
-      }
+    if (!spots || spots.length === 0) {
+        return <div>Loading...</div>; // Display a loading state until spots are fetched
+    }
     return (
         <>
             {console.log("Spots:", spots)}
@@ -50,6 +48,7 @@ function LandingPage() {
                         {spots.map((spot, index) => (
                             <Link to={`/spots/${spot.id}`} key={spot.id} className='spot-item'>
                                 <Tooltip title={spot.name} arrow>
+                                   
                                     <div class="hover-text">
                                     </div>
                                     <img className='image' src={spot.previewImage}
@@ -57,9 +56,9 @@ function LandingPage() {
                                     <div className='info'>
                                         <div className='inner-info'>
                                             <p><strong>{spot.city}, {spot.state}</strong></p>
-                                            {console.log("Type of spot.price:", typeof spot.price)}
                                             {console.log('price', spot.price)}
-                                            <p>${spot.price.toFixed(2)} night</p>
+                                            {console.log("Type of spot.price:", typeof spot.price)}
+                                            <p>${parseFloat(spot.price).toFixed(2)} night</p>
                                         </div>
                                         <div className='rating'>
                                             <i className="fa-sharp fa-solid fa-star"></i>
