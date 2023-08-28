@@ -140,7 +140,7 @@ function SpotsDetails() {
                                     <div className='top-info'>
 
                                         <div className='card-left'>
-                                            <h2>${spot.price.toFixed(2)}</h2>
+                                            <h2>${parseFloat(spot.price).toFixed(2)}</h2>
                                             <p>night</p>
                                         </div>
                                         <div className='card-right'>
@@ -151,7 +151,7 @@ function SpotsDetails() {
                                                     <div className='rating-info'>
                                                         <div className='inner-info'>
                                                             <i id='first-star' className="fa-sharp fa-solid fa-star"></i>
-                                                            <h2>{spot.avgStarRating.toFixed(1)}</h2>
+                                                            <h2>{parseFloat(spot.avgStarRating).toFixed(1)}</h2>
                                                         </div>
                                                     </div>
                                                 </>
@@ -224,7 +224,7 @@ function SpotsDetails() {
 
                                                             <div className='left-review-info'>
                                                                 <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
-                                                                <h2 className='new'>{spot.avgStarRating.toFixed(1)}</h2>
+                                                                <h2 className='new'>{parseFloat(spot.avgStarRating).toFixed(1)}</h2>
                                                                 <div className='dot-wrapper'>
                                                                     <div className='dot'>.</div>
                                                                 </div>
@@ -243,7 +243,7 @@ function SpotsDetails() {
                                                             <>
                                                                 <div className='left-review-info'>
                                                                     <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
-                                                                    <h2 className='new'>{spot.avgStarRating.toFixed(1)}</h2>
+                                                                    <h2 className='new'>{parseFloat(spot.avgStarRating).toFixed(1)}</h2>
                                                                     <div className='dot-wrapper'>
                                                                         <div className='dot'>.</div>
                                                                     </div>
@@ -262,7 +262,7 @@ function SpotsDetails() {
                                                                     <>
                                                                         <div className='left-review-info'>
                                                                             <i id='second-star' className="fa-sharp fa-solid fa-star"></i>
-                                                                            <h2 className='new'>{spot.avgStarRating.toFixed(1)}</h2>
+                                                                            <h2 className='new'>{parseFloat(spot.avgStarRating).toFixed(1)}</h2>
                                                                             <div className='dot-wrapper'>
                                                                                 <div className='dot'>.</div>
                                                                             </div>
