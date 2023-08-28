@@ -13,7 +13,14 @@ const DELETE_SPOT_REVIEW = 'spots/deleteSpot'
 const UPDATE_SPOT = 'spots/updateSpot'
 const CLEAR_SPOT_DATA = 'CLEAR_SPOT_DATA';
 const CLEAR_SPOT_REVIEWS = 'CLEAR_SPOT_REVIEWS';
+const GET_ALL_SPOTS_SUCCESS = 'GET_ALL_SPOTS_SUCCESS';
 //action creators
+const getSpotsSuccess = (spots) => {
+  return {
+    type: GET_ALL_SPOTS_SUCCESS,
+    payload: spots,
+  };
+};
 
 const getSpots = (spots) => {
   return {
@@ -85,12 +92,19 @@ export const clearSpotReviews = () => ({
 
 //thunks
 export const getAllSpots = () => async (dispatch) => {
-  const response = await csrfFetch('/api/spots');
-  if (response.ok) {
-    const spots = await response.json()
-    dispatch(getSpots(spots))
+  dispatch({ type: GET_ALL_SPOTS }); // Dispatch loading action first
+
+  try {
+    const response = await csrfFetch('/api/spots');
+    if (response.ok) {
+      const spots = await response.json();
+      dispatch(getSpotsSuccess(spots)); // Dispatch success action
+    }
+  } catch (error) {
+    // Handle error...
   }
-}
+};
+
 export const thunkSetSpot = (spot) => async (dispatch) => {
   const { address, city, state, country, name, description, price } = spot
   const response = await csrfFetch(`/api/spots`, {
@@ -254,7 +268,9 @@ const calculateAverageRating = (reviews) => {
   return totalRating / reviews.length;
 };
 
-const initialState = { spots: {}, spotsReview: [],  avgStarRating: 0};
+const initialState = { spots: {}, spotsReview: [], 
+ avgStarRating: 0,
+isLoading: false,};
 
 const spotsReducer = (state = initialState, action) => {
   let newState;
@@ -265,9 +281,16 @@ const spotsReducer = (state = initialState, action) => {
         spots: action.payload
       }
     case GET_SPOTS:
-      newState = Object.assign({}, state)
-      newState['spotsbyId'] = action.payload
-      return newState
+      return {
+        ...state,
+        isLoading: true, // Set isLoading to true when fetching
+      };
+      case GET_ALL_SPOTS_SUCCESS: // Assuming you have a success action for fetching spots
+      return {
+        ...state,
+        spots: action.payload,
+        isLoading: false, // Set isLoading back to false when data is fetched
+      };
     case GET_SPOT_REVIEWS:
       newState = Object.assign({}, state)
       newState.spotsReview = action.payload
