@@ -19,17 +19,55 @@ function CreateSpot() {
     const dispatch = useDispatch()
     const handleSubmit = async (e) => {
         e.preventDefault()
+        
         const errors = {}
         if (!country.length) {
-            errors.country = 'Country is required'
+            errors.country = "Country is required";
+          }
+          if (country.length > 30) {
+            errors.country = "Country needs to be less than 30 characters";
+          }
+          if (country.length === 1 || country.length === 2) {
+            errors.country = "Country needs to be more than 2 characters";
+          }
+          //address validation
+          if (!address.length) errors.address = "Address is required";
+          if (address.length > 30) {
+            errors.address = "Address needs to be less than 30 characters";
+          }
+          if (address.length > 0 && address.length <= 10) {
+            errors.address = "Address needs to be more than 10 characters";
+          }
+      
+          if (!city.length) errors.city = "City is required";
+          if (city.length > 30) {
+            errors.city = "City needs to be less than 30 characters";
+          }
+          if (city.length > 0 && city.length <= 2) {
+            errors.city = "City needs to be more than 2 characters";
+          }
+          
+          if (!state.length) errors.state = "State is required";
+          if (state.length > 30) {
+            errors.state = "State needs to be less than 30 characters";
+          }
+          if (state.length === 1) {
+              errors.state = "State needs to be more than 1 characters";
+            }
+            if (!description.length)
+            errors.text = "Description needs a minimum of 30 characters";
+        
+        if (!name.length) errors.name = "Name is required";
+        if (name.length > 0 && name.length <= 5) {
+          errors.name = "Name needs to be more than 5 characters";
         }
-        if (!address.length) errors.address = 'Address is required'
-        if (!city.length) errors.city = 'City is required'
-        if (!state.length) errors.state = 'State is required'
-        if (!description.length) errors.text = 'Description needs a minimum of 30 characters'
-        if (!name.length) errors.name = 'Name is required'
-        if (!price.length) errors.price = 'Price is required'
-        if (!urls[0].length) errors.prevImg = 'The first image URL is required';
+        if (name.length > 30) {
+          errors.name = "Name needs to be less than 30 characters";
+        }
+          if (price === null || price === undefined || price === '') {
+            errors.price = "Price is required";
+          }
+          if (!urls[0].length) errors.prevImg = "Preview Image is required";
         if (Object.keys(errors).length === 0) {
             // If no errors, proceed with form submission
             const spotData = {

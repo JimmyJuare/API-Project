@@ -4,7 +4,7 @@ import { csrfFetch } from "./csrf";
 const SET_SPOTS = 'spots/setSpots'
 const SET_SPOTS_IMAGES = 'spots/setSpotImages'
 const SET_SPOTS_REVIEWS = 'spots/setSpotReviews'
-const GET_SPOTS = 'spots/getSpotbyId'
+const GET_ONE_SPOT = 'spots/getSpotbyId'
 const GET_ALL_SPOTS = 'spots/getAllSpots'
 const GET_SPOT_REVIEWS = 'spots/getSpotReview'
 const GET_CURRENT_SPOT = 'spots/getCurrentSpot'
@@ -39,9 +39,9 @@ const setSpotsReviews = (reviews) => {
     payload: reviews
   };
 };
-const getSpot = (spotsbyId) => {
+const getOneSpot = (spotsbyId) => {
   return {
-    type: GET_SPOTS,
+    type: GET_ONE_SPOT,
     payload: spotsbyId
   };
 };
@@ -175,7 +175,7 @@ export const getSpotbyId = (spotId) => async (dispatch) => {
     const response = await csrfFetch(`/api/spots/${spotId}`);
     if (response.ok) {
       const spot = await response.json()
-      dispatch(getSpot(spot))
+      dispatch(getOneSpot(spot))
     } else {
       // Handle the case when the response is not ok (e.g., error status)
       console.error('Error occurred:', response);
@@ -264,7 +264,7 @@ const spotsReducer = (state = initialState, action) => {
         ...state,
         spots: action.payload
       }
-    case GET_SPOTS:
+    case GET_ONE_SPOT:
       newState = Object.assign({}, state)
       newState['spotsbyId'] = action.payload
       return newState
