@@ -28,7 +28,7 @@ function ReviewModal(props) {
     setStars(num);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     // ... your code for submitting the review
 
     // Clear spot and reviews state when changing spots
@@ -39,22 +39,19 @@ function ReviewModal(props) {
       setErrors({ error: "Review already exists for this spot" })
       return
     }
-    dispatch(thunkSetReviews(spotId, { review, stars }))
+    await dispatch(thunkSetReviews(spotId, { review, stars }))
+    await dispatch(getSpotbyId(spotId))
     closeModal()
     
-    dispatch(getSpotbyId(spotId))
-      .then(() => dispatch(getSpotsReviews(spotId)))
-      .catch((error) => {
-        console.error('Error Fetching Spot and Reviews:', error);
-      });
+      
 
-    // Return a cleanup function to clear spot and reviews when unmounting
-    return () => {
-      dispatch(clearSpotData());
-      dispatch(clearSpotReviews());
-      setHover(0);
-      setStars(0);
-    };
+    // // Return a cleanup function to clear spot and reviews when unmounting
+    // return () => {
+    //   dispatch(clearSpotData());
+    //   dispatch(clearSpotReviews());
+    //   setHover(0);
+    //   setStars(0);
+    // };
 
   };
   const isFormValid =
