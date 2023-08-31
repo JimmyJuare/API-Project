@@ -65,16 +65,16 @@ function SpotsDetails() {
         setModalContent(content);
     };
 
-    const handleDeleteReview = (reviewId, spotId) => {
-        handleDeleteModal(reviewId, spotId);
-        dispatch(thunkDeleteSpotReview(reviewId))
-            .then(() => dispatch(getSpotbyId(spotId)))
-            .then(() => dispatch(getSpotsReviews(spotId)))
-            .catch((error) => {
-                console.error("Error Fetching Spot and Reviews:", error);
-            });
-        setModalContent(null); // Close the modal after deleting the review
-    };
+    // const handleDeleteReview = (reviewId, spotId) => {
+    //     handleDeleteModal(reviewId, spotId);
+    //     dispatch(thunkDeleteSpotReview(reviewId))
+    //         .then(() => dispatch(getSpotbyId(spotId)))
+    //         .then(() => dispatch(getSpotsReviews(spotId)))
+    //         .catch((error) => {
+    //             console.error("Error Fetching Spot and Reviews:", error);
+    //         });
+    //     setModalContent(null); // Close the modal after deleting the review
+    // };
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const month = date.toLocaleString("default", { month: "long" });
@@ -387,7 +387,7 @@ function SpotsDetails() {
                                                                 review.userId === sessionUser.id && (
                                                                     <button
                                                                         onClick={() =>
-                                                                            handleDeleteReview(review.id, spotId)
+                                                                            handleDeleteModal(review.id, spotId)
                                                                         }
                                                                     >
                                                                         Delete
