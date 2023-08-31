@@ -134,23 +134,35 @@ export const thunkUpdateSpot = (spotId, spotData) => async (dispatch) => {
   }
 };
 export const thunkSetReviews = (spotId, Review) => async (dispatch) => {
-  const { review, stars } = Review
-  console.log('Spot ID:', spotId);
-  const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
-    method: 'POST',
+  const { review, stars } = Review;
 
-    body: JSON.stringify({
-      review,
-      stars
-    })
-  });
-  if (response.ok) {
-    const data = await response.json()
-    dispatch(setSpotsReviews(data))
+  try {
+    const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+      method: 'POST',
+      body: JSON.stringify({
+        review,
+        stars
+      })
+    });
 
-    return data
+    if (response.ok) {
+      const data = await response.json();
+
+      // After successfully adding the new review, fetch the reviews again
+      dispatch(getSpotsReviews(spotId));
+
+      return data;
+    } else {
+      // Handle the case when the response is not ok (e.g., error status)
+      console.error('Error occurred:', response);
+    }
+  } catch (error) {
+    // Handle any other errors that occurred during the request
+    console.error('Error occurred:', error);
   }
-}
+};
+
+
 export const thunkSetSpotImages = (url, spotId, preview = false) => async (dispatch) => {
 
   console.log('this is the url');
@@ -190,7 +202,8 @@ export const getSpotsReviews = (spotId) => async (dispatch) => {
     const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
     if (response.ok) {
       const spot = await response.json()
-      dispatch(getReview(spot))
+      console.log('this is the thunk spot Reviews', spot.Reviews)
+      dispatch(getReview(spot.Reviews))
     } else {
       // Handle the case when the response is not ok (e.g., error status)
       console.error('Error occurred:', response);
@@ -205,6 +218,7 @@ export const getCurrSpots = () => async (dispatch) => {
     const response = await csrfFetch(`/api/spots/current`);
     if (response.ok) {
       const spot = await response.json()
+      console.log('thunk spot log', spot);
       dispatch(getCurrentSpots(spot))
     } else {
       // Handle the case when the response is not ok (e.g., error status)
@@ -222,6 +236,7 @@ export const thunkDeleteSpot = (spotId) => async (dispatch) => {
     });
     if (response.ok) {
       dispatch(deleteSpot(spotId))
+      dispatch(getCurrSpots(spotId))
     } else {
       // Handle the case when the response is not ok (e.g., error status)
       console.error('Error occurred:', response);
@@ -273,9 +288,11 @@ const spotsReducer = (state = initialState, action) => {
       newState.spotsReview = action.payload
       return newState
     case GET_CURRENT_SPOT:
-      newState = Object.assign({}, state)
-      newState.currentSpot = action.payload
-      return newState
+      return{
+        ...state,
+        currentSpot: action.payload
+      }
+      
     case SET_SPOTS:
       newState = Object.assign({}, state)
       newState.newSpot = action.payload

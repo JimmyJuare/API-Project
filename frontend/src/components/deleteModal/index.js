@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { thunkDeleteSpot } from "../../store/spots";
+import { clearCurrentSpot, thunkDeleteSpot } from "../../store/spots";
 import "./deleteModal.css";
 
 function DeleteModal(props) {
@@ -12,6 +12,7 @@ function DeleteModal(props) {
   const handleDelete = () => {
     dispatch(thunkDeleteSpot(spotId));
     closeModal(); // Close the modal after deleting the spot
+    
   };
 
   const handleCancel = () => {
