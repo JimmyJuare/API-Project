@@ -11,21 +11,19 @@ function DeleteReviewModal(props) {
   const { reviewId, spotId } = props;
   const dispatch = useDispatch();
   const { closeModal } = useModal();
-  const handleDelete = () => {
+  const handleDelete = async() => {
     //this deletes the spot review
-    dispatch(thunkDeleteSpotReview(reviewId));
+    await dispatch(thunkDeleteSpotReview(reviewId));
+    await dispatch(getSpotbyId(spotId))
+    await dispatch(getSpotsReviews(spotId))
     closeModal();
-    console.log('this is the spotId in deleteReview',spotId);
-    dispatch(getSpotbyId(spotId))
-    .then(() => dispatch(getSpotsReviews(spotId)))
-        .catch((error) => {
-            console.error('Error Fetching Spot and Reviews:', error);
-          });
-        return(()=>{
-          dispatch(clearSpotData());
-          dispatch(clearSpotReviews());
+    
+        
+        // return(()=>{
+        //   dispatch(clearSpotData());
+        //   dispatch(clearSpotReviews());
           
-        }) // Close the modal after deleting the review
+        // }) // Close the modal after deleting the review
   };
 
   const handleCancel = () => {
