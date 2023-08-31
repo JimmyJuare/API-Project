@@ -93,7 +93,8 @@ function CurrentSpots() {
                       </div>
                       <div className="rating">
                         <i className="fa-sharp fa-solid fa-star"></i>
-                        {spot.avgRating === 0 ? (
+                        {console.log(spot)}
+                        {spot.avgRating === null || spot.avgRating === 0 ? (
                           <p>new</p>
                         ) : (
                           <p>{parseFloat(spot.avgRating).toFixed(1)}</p>
@@ -117,17 +118,7 @@ function CurrentSpots() {
         </div>
       </div>
     )}
-    {!spots && spots.length === 0 && (
-         <>
-         <div id="top-info">
-           <h2>Manage Your Spots</h2>
-           <Link id="link" to="/spots">
-             Create a spot
-           </Link>
-         </div>
-         <div style={{ textAlign: "center", fontSize: "20px" }}>no spots</div>;
-       </>
-    )}
+    
     </>
       
   );

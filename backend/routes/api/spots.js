@@ -178,11 +178,9 @@ router.get('/current', requireAuth, async (req, res) => {
     });
   }
 
-  if (spotsData.length === 0) {
-    res.status(404).json({ message: "No spots found for the user" });
-  } else {
-    res.status(200).json({ Spots: spotsData });
-  }
+  
+    return res.status(200).json({ Spots: spotsData });
+
 });
 
 
