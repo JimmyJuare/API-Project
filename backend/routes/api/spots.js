@@ -138,45 +138,53 @@ const validateBookings = [
 ];
 //gets spots of current user
 router.get('/current', requireAuth, async (req, res) => {
-  const userId = req.user.id
-  const spot = await Spot.unscoped().findAll({
+  const userId = req.user.id;
+  const spots = await Spot.unscoped().findAll({
     where: {
-      ownerId: userId
-    }
-  })
-  const count = await Review.count({ where: { spotId: userId } })
-  
-  const PreviewImage = await SpotImage.findOne({
-  where:{
-    spotId:userId
+      ownerId: userId,
+    },
+  });
+
+  const spotsData = [];
+
+  for (const spot of spots) {
+    const count = await Review.count({ where: { spotId: spot.id } });
+
+    const previewImage = await SpotImage.findOne({
+      where: {
+        spotId: spot.id,
+        preview: true,
+      },
+    });
+
+    const averageRating = await getAvg(userId, count);
+
+    spotsData.push({
+      id: spot.id,
+      ownerId: spot.ownerId,
+      address: spot.address,
+      city: spot.city,
+      state: spot.state,
+      country: spot.country,
+      lat: spot.lat,
+      lng: spot.lng,
+      name: spot.name,
+      description: spot.description,
+      price: spot.price,
+      createdAt: spot.createdAt,
+      updatedAt: spot.updatedAt,
+      avgRating: averageRating,
+      previewImage: previewImage ? previewImage.url : null,
+    });
   }
-})
-const previewImage = await PreviewImage ? PreviewImage.url : null;
-const averageRating = await getAvg(userId, count)
-const avgRating = averageRating
-const Spots = spot.map(e => ({
-  id:e.id,
-  ownerId: spot.ownerId,
-  address: spot.address,
-  city: e.city,
-  state: e.state,
-  country: e.country,
-  lat: e.lat,
-  lng: e.lng,
-  name: e.name,
-  description: e.description,
-  price: e.price,
-  createdAt: e.createdAt,
-  updatedAt:e.updatedAt,
-  avgRating: avgRating,
-  previewImage: previewImage
-}))
-  if (!spot) {
-    res.status(404).json({ message: 'Spot couldn\'t be found' }) 
+
+  if (spotsData.length === 0) {
+    res.status(404).json({ message: "No spots found for the user" });
   } else {
-    res.status(200).json({ Spots })
+    res.status(200).json({ Spots: spotsData });
   }
 });
+
 
 //creates a spot
 router.post('/', validateValues, requireAuth, async (req, res) => {

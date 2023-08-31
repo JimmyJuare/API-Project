@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { getAllSpots, getSpotbyId } from '../../store/spots'
+import { getAllSpots } from '../../store/spots'
 import { useDispatch, useSelector } from 'react-redux';
 import { Tooltip } from 'react-tippy';
 import 'react-tippy/dist/tippy.css';
-import { useState } from 'react';
 import './spots.css'
 import { Link } from 'react-router-dom/';
 function LandingPage() {
@@ -41,10 +40,10 @@ function LandingPage() {
     }
     return (
         <>
-            {console.log("Spots:", spots)}
             <div className='wrapper'>
                 {spots && (
                     <>
+                    {console.log(spots)}
                         {spots.map((spot, index) => (
                             <Link to={`/spots/${spot.id}`} key={spot.id} className='spot-item'>
                                 <Tooltip title={spot.name} arrow>
