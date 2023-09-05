@@ -37,10 +37,10 @@ function DeleteReviewModal(props) {
         <p>Are you sure you want to delete this review?</p>
         <div className="buttons">
           <button className="delete-button" onClick={handleDelete}>
-            Yes
+            Yes (Delete Review)
           </button>
           <button className="cancel-button" onClick={handleCancel}>
-            No
+            No (Keep Review)
           </button>
         </div>
       </div>
