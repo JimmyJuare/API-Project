@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from "react-redux";
 
 import { useModal } from "../../context/Modal";
-import { thunkDeleteSpotReview, getSpotbyId, getSpotsReviews, clearSpotData, clearSpotReviews } from '../../store/spots';
+import { thunkDeleteSpotReview, getSpotbyId, getSpotsReviews } from '../../store/spots';
 
 import "./DeleteReviewModal.css";
 
@@ -33,7 +33,8 @@ function DeleteReviewModal(props) {
   return (
     <>
       <div className="delete-modal">
-        <h2>Are you sure you want to delete this review?</h2>
+        <h1>Confirm Delete</h1>
+        <p>Are you sure you want to delete this review?</p>
         <div className="buttons">
           <button className="delete-button" onClick={handleDelete}>
             Yes

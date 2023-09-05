@@ -1,0 +1,34 @@
+.delete-modal{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 300px;
+    height: auto;
+}
+.buttons{
+    display: flex;
+    flex-direction: column;
+}
+.delete-button{
+    width: 100%;
+    border: 2px solid black;
+    background-color: red;
+    color: white;
+    font-size: 17px;
+    padding: 0.5rem;
+    margin: 0.2rem 0 0.2rem 0;
+    cursor: pointer;
+    filter: drop-shadow(3px 3px 1px black);
+}
+.cancel-button{
+    width: 100%;
+    border: 2px solid black;
+    background-color: rgb(101, 101, 101);
+    color: white;
+    font-size: 17px;
+    padding: 0.5rem;
+    margin: 0.2rem 0 0.2rem 0;
+    cursor: pointer;
+    filter: drop-shadow(3px 3px 1px black);
+}
