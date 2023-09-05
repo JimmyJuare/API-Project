@@ -12,7 +12,6 @@ function DeleteModal(props) {
   const handleDelete = () => {
     dispatch(thunkDeleteSpot(spotId));
     closeModal(); // Close the modal after deleting the spot
-    
   };
 
   const handleCancel = () => {
@@ -22,13 +21,14 @@ function DeleteModal(props) {
   return (
     <>
       <div className="delete-modal">
-        <h2>Are you sure you want to delete this spot?</h2>
+        <h1>Confirm Delete</h1>
+        <p>Are you sure you want to delete this spot?</p>
         <div className="buttons">
           <button className="delete-button" onClick={handleDelete}>
-            Yes
+            Yes (Delete Spot)
           </button>
           <button className="cancel-button" onClick={handleCancel}>
-            No
+            No (Keep Spot)
           </button>
         </div>
       </div>
