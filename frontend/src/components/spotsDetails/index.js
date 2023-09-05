@@ -385,7 +385,7 @@ function SpotsDetails() {
 
                                                             {sessionUser &&
                                                                 review.userId === sessionUser.id && (
-                                                                    <button
+                                                                    <button className="delete"
                                                                         onClick={() =>
                                                                             handleDeleteModal(review.id, spotId)
                                                                         }

@@ -1,8 +1,0 @@
-.delete-modal button{
-    height: 20px;
-    width: 50px;
-}
-.delete-modal{
-    display: flex;
-    flex-direction: column;
-}
